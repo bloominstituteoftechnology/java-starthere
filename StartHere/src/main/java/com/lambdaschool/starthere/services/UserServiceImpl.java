@@ -42,8 +42,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
     public User findUserById(long id) throws EntityNotFoundException
     {
-        return userrepos.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return userrepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
     }
 
     public List<User> findAll()
@@ -59,8 +58,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
         if (userrepos.findById(id).isPresent())
         {
             userrepos.deleteById(id);
-        }
-        else
+        } else
         {
             throw new EntityNotFoundException(Long.toString(id));
         }
@@ -83,11 +81,12 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
         for (Quote q : user.getQuotes())
         {
-            newUser.getQuotes().add( new Quote(q.getQuote(), newUser));
+            newUser.getQuotes().add(new Quote(q.getQuote(), newUser));
         }
 
         return userrepos.save(newUser);
     }
+
 
     @Transactional
     @Override
@@ -128,18 +127,16 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 {
                     for (Quote q : user.getQuotes())
                     {
-                        currentUser.getQuotes().add( new Quote(q.getQuote(), currentUser));
+                        currentUser.getQuotes().add(new Quote(q.getQuote(), currentUser));
                     }
                 }
 
                 return userrepos.save(currentUser);
-            }
-            else
+            } else
             {
                 throw new EntityNotFoundException(Long.toString(id) + " Not current user");
             }
-        }
-        else
+        } else
         {
             throw new EntityNotFoundException(authentication.getName());
         }

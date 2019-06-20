@@ -10,11 +10,9 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 // http://localhost:2019/swagger-ui.html
 @Configuration
-@EnableSwagger2
 public class Swagger2Config
 {
     @Bean
@@ -22,9 +20,8 @@ public class Swagger2Config
     {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors
-                        .basePackage("com.lambdaschool.restaurants"))
-                .paths(PathSelectors.regex("/.*"))
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false) // Allows only my exception responses
                 .ignoredParameterTypes(Pageable.class) // allows only my paging parameter list
@@ -33,10 +30,10 @@ public class Swagger2Config
 
     private ApiInfo apiEndPointsInfo()
     {
-        return new ApiInfoBuilder().title("Restaurant Example")
-                .description("Restaurant Example")
+        return new ApiInfoBuilder().title("Java String Back End Starting Project")
+                .description("A starting application for developing Java Spring Back End Projects")
                 .contact(new Contact("John Mitchell", "http://www.lambdaschool.com", "john@lambdaschool.com"))
-                .license("MIT").licenseUrl("https://github.com/LambdaSchool/java-crudysnacks/blob/master/LICENSE")
+                .license("MIT").licenseUrl("https://github.com/LambdaSchool/java-starthere/blob/master/LICENSE")
                 .version("1.0.0").build();
     }
 }
