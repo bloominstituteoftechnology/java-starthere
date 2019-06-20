@@ -17,6 +17,4 @@ public interface RoleRepository extends CrudRepository<Role, Long>
     @Modifying
     @Query(value = "INSERT INTO UserRoles(userid, roleid) values (:userid, :roleid)", nativeQuery = true)
     void insertUserRoles(long userid, long roleid);
-
-    Role findByNameIgnoreCase(String name);
 }
