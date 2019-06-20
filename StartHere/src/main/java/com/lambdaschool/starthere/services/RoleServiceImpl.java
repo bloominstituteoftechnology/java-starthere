@@ -1,6 +1,7 @@
 package com.lambdaschool.starthere.services;
 
 import com.lambdaschool.starthere.models.Role;
+import com.lambdaschool.starthere.models.UserRoles;
 import com.lambdaschool.starthere.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,20 @@ public class RoleServiceImpl implements RoleService
         return rolerepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
     }
 
+    @Override
+    public Role findByName(String name)
+    {
+        Role rr = rolerepos.findByNameIgnoreCase(name);
+
+        if (rr != null)
+        {
+            return rr;
+        }
+        else
+        {
+            throw new EntityNotFoundException(name);
+        }
+    }
 
     @Override
     public void delete(long id)

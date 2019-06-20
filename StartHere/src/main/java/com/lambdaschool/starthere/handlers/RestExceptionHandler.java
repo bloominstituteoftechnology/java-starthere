@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
     @Autowired
     private MessageSource messageSource;
 
-    @ExceptionHandler({ResourceNotFoundException.class, UsernameNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, EntityNotFoundException.class, UsernameNotFoundException.class})
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException rnfe, HttpServletRequest request)
     {
         ErrorDetail errorDetail = new ErrorDetail();
