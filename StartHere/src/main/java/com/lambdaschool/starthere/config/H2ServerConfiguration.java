@@ -11,7 +11,8 @@ import java.sql.SQLException;
 @Configuration
 // taken from https://techdev.io/en/developer-blog/querying-the-embedded-h2-database-of-a-spring-boot-application
 // necessary for using the database tool built into intellij
-public class H2ServerConfiguration {
+public class H2ServerConfiguration
+{
 
     // TCP port for remote connections, default 9092
     @Value("${h2.tcp.port:9092}")
@@ -23,7 +24,7 @@ public class H2ServerConfiguration {
 
     /**
      * TCP connection to connect with SQL clients to the embedded h2 database.
-     *
+     * <p>
      * Connect to "jdbc:h2:tcp://localhost:9092/mem:testdb", username "sa", password empty.
      */
     @Bean
@@ -35,12 +36,13 @@ public class H2ServerConfiguration {
 
     /**
      * Web console for the embedded h2 database.
-     *
+     * <p>
      * Go to http://localhost:8082 and connect to the database "jdbc:h2:mem:testdb", username "sa", password empty.
      */
     @Bean
     @ConditionalOnExpression("${h2.web.enabled:true}")
-    public Server h2WebServer() throws SQLException {
+    public Server h2WebServer() throws SQLException
+    {
         return Server.createWebServer("-web", "-webAllowOthers", "-webPort", h2WebPort).start();
     }
 }

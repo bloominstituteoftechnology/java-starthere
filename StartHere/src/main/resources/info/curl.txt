@@ -1,0 +1,31 @@
+curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://localhost:2019/oauth/token
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/users
+
+curl -X POST --user "lambda-client:lambda-secret" -d 'grant_type=password&username=barnbarn&password=ILuvM4th!' http://localhost:2019/oauth/token
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer acd0586d-fc11-4715-a2ae-9acab553672c" http://localhost:2019/users/users
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/users
+
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" -d "{ \"username\":\"snoopy\", \"password\":\"password\", \"roleid\":"1" }" http://localhost:2019/users/user
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/users
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/14
+
+curl -X DELETE -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/14
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/14
+
+curl -X POST -H "Content-Type: application/json" -d "{\"username\": \"Ginger\", \"password\": \"EATEATEAT\"}" http://localhost:2019/createnewuser
+
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" -d "{ \"username\": \"Snoopy\", \"password\": \"password\", \"userRoles\": [ { \"role\": { \"roleid\": 1 } } ], \"quotes\": [ { \"quote\": \"The Red Baron\" } ]}" http://localhost:2019/users/user
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/15
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/oauth/revoke-token
+
+*** using a different host
+
+curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://jrmmba-starthere.herokuapp.com/oauth/token

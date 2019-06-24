@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 return userrepos.save(currentUser);
             } else
             {
-                throw new EntityNotFoundException(Long.toString(id) + " Not current user");
+                throw new EntityNotFoundException(id + " Not current user");
             }
         } else
         {

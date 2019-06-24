@@ -19,8 +19,7 @@ public class UserAuditing implements AuditorAware<String>
         if (authentication != null)
         {
             uname = authentication.getName();
-        }
-        else
+        } else
         {
             uname = "SYSTEM";
         }

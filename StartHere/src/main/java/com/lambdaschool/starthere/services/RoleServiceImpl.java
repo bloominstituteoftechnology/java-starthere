@@ -1,7 +1,6 @@
 package com.lambdaschool.starthere.services;
 
 import com.lambdaschool.starthere.models.Role;
-import com.lambdaschool.starthere.models.UserRoles;
 import com.lambdaschool.starthere.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,8 +39,7 @@ public class RoleServiceImpl implements RoleService
         if (rr != null)
         {
             return rr;
-        }
-        else
+        } else
         {
             throw new EntityNotFoundException(name);
         }

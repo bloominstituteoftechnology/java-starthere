@@ -21,12 +21,12 @@ import java.util.List;
 @RequestMapping("/roles")
 public class RolesController
 {
+    private static final Logger logger = LoggerFactory.getLogger(RolesController.class);
     @Autowired
     RoleService roleService;
 
-    private static final Logger logger = LoggerFactory.getLogger(RolesController.class);
-
-    @GetMapping(value = "/roles", produces = {"application/json"})
+    @GetMapping(value = "/roles",
+                produces = {"application/json"})
     public ResponseEntity<?> listRoles(HttpServletRequest request)
     {
         logger.trace(request.getRequestURI() + " accessed");
@@ -36,8 +36,11 @@ public class RolesController
     }
 
 
-    @GetMapping(value = "/role/{roleId}", produces = {"application/json"})
-    public ResponseEntity<?> getRole(HttpServletRequest request, @PathVariable Long roleId)
+    @GetMapping(value = "/role/{roleId}",
+                produces = {"application/json"})
+    public ResponseEntity<?> getRole(HttpServletRequest request,
+                                     @PathVariable
+                                             Long roleId)
     {
         logger.trace(request.getRequestURI() + " accessed");
 
@@ -47,7 +50,9 @@ public class RolesController
 
 
     @PostMapping(value = "/role")
-    public ResponseEntity<?> addNewRole(HttpServletRequest request, @Valid @RequestBody Role newRole) throws URISyntaxException
+    public ResponseEntity<?> addNewRole(HttpServletRequest request, @Valid
+    @RequestBody
+            Role newRole) throws URISyntaxException
     {
         logger.trace(request.getRequestURI() + " accessed");
 
@@ -55,19 +60,21 @@ public class RolesController
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newRoleURI = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{roleid}")
-                .buildAndExpand(newRole.getRoleid())
-                .toUri();
+        URI newRoleURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{roleid}").buildAndExpand(newRole.getRoleid()).toUri();
         responseHeaders.setLocation(newRoleURI);
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
 
+//    @PostMapping(value = "/user/{userid}/role/{roleid}")
+
+
+
     @DeleteMapping("/role/{id}")
-    public ResponseEntity<?> deleteRoleById(HttpServletRequest request, @PathVariable long id)
+    public ResponseEntity<?> deleteRoleById(HttpServletRequest request,
+                                            @PathVariable
+                                                    long id)
     {
         logger.trace(request.getRequestURI() + " accessed");
 

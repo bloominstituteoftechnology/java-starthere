@@ -1,10 +1,11 @@
 package com.lambdaschool.starthere.services;
 
-        import com.lambdaschool.starthere.models.User;
+import com.lambdaschool.starthere.models.User;
 
-        import java.util.List;
+import java.util.List;
 
-public interface UserService {
+public interface UserService
+{
 
     List<User> findAll();
 

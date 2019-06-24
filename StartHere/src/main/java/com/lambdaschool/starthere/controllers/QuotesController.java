@@ -26,7 +26,8 @@ public class QuotesController
     @Autowired
     QuoteService quoteService;
 
-    @GetMapping(value = "/quotes", produces = {"application/json"})
+    @GetMapping(value = "/quotes",
+                produces = {"application/json"})
     public ResponseEntity<?> listAllQuotes(HttpServletRequest request)
     {
         logger.trace(request.getRequestURI() + " accessed");
@@ -36,8 +37,10 @@ public class QuotesController
     }
 
 
-    @GetMapping(value = "/quote/{quoteId}", produces = {"application/json"})
-    public ResponseEntity<?> getQuote(HttpServletRequest request, @PathVariable
+    @GetMapping(value = "/quote/{quoteId}",
+                produces = {"application/json"})
+    public ResponseEntity<?> getQuote(HttpServletRequest request,
+                                      @PathVariable
                                               Long quoteId)
     {
         logger.trace(request.getRequestURI() + " accessed");
@@ -47,8 +50,10 @@ public class QuotesController
     }
 
 
-    @GetMapping(value = "/username/{userName}", produces = {"application/json"})
-    public ResponseEntity<?> findQuoteByUserName(HttpServletRequest request, @PathVariable
+    @GetMapping(value = "/username/{userName}",
+                produces = {"application/json"})
+    public ResponseEntity<?> findQuoteByUserName(HttpServletRequest request,
+                                                 @PathVariable
                                                          String userName)
     {
         logger.trace(request.getRequestURI() + " accessed");
@@ -58,10 +63,10 @@ public class QuotesController
     }
 
 
-
     @PostMapping(value = "/quote")
-    public ResponseEntity<?> addNewQuote(HttpServletRequest request, @Valid @RequestBody
-                                                 Quote newQuote) throws URISyntaxException
+    public ResponseEntity<?> addNewQuote(HttpServletRequest request, @Valid
+    @RequestBody
+            Quote newQuote) throws URISyntaxException
     {
         logger.trace(request.getRequestURI() + " accessed");
 
@@ -69,11 +74,7 @@ public class QuotesController
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newQuoteURI = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{quoteid}")
-                .buildAndExpand(newQuote.getQuotesid())
-                .toUri();
+        URI newQuoteURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{quoteid}").buildAndExpand(newQuote.getQuotesid()).toUri();
         responseHeaders.setLocation(newQuoteURI);
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
@@ -81,7 +82,8 @@ public class QuotesController
 
 
     @DeleteMapping("/quote/{id}")
-    public ResponseEntity<?> deleteQuoteById(HttpServletRequest request, @PathVariable
+    public ResponseEntity<?> deleteQuoteById(HttpServletRequest request,
+                                             @PathVariable
                                                      long id)
     {
         logger.trace(request.getRequestURI() + " accessed");

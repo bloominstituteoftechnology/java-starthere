@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,9 @@ public class OpenController
     @Autowired
     private RoleService roleService;
 
-    @PostMapping(value = "/createnewuser", consumes = {"application/json"}, produces = {"application/json"})
+    @PostMapping(value = "/createnewuser",
+                 consumes = {"application/json"},
+                 produces = {"application/json"})
     public ResponseEntity<?> addNewUser(HttpServletRequest request, @Valid
     @RequestBody
             User newuser) throws URISyntaxException
@@ -44,13 +45,11 @@ public class OpenController
         newRoles.add(new UserRoles(newuser, roleService.findByName("user")));
         newuser.setUserRoles(newRoles);
 
-        newuser =  userService.save(newuser);
+        newuser = userService.save(newuser);
 
         // set the location header for the newly created resource - to another controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newRestaurantURI = ServletUriComponentsBuilder
-                .fromUriString(request.getServerName() + ":" + request.getLocalPort() + "/users/user/{userId}")
-                .buildAndExpand(newuser.getUserid()).toUri();
+        URI newRestaurantURI = ServletUriComponentsBuilder.fromUriString(request.getServerName() + ":" + request.getLocalPort() + "/users/user/{userId}").buildAndExpand(newuser.getUserid()).toUri();
         responseHeaders.setLocation(newRestaurantURI);
 
 

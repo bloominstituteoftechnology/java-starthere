@@ -29,8 +29,7 @@ public class QuoteServiceImpl implements QuoteService
     @Override
     public Quote findQuoteById(long id)
     {
-        return quoterepos.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return quoterepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
     }
 
     @Override
@@ -42,13 +41,11 @@ public class QuoteServiceImpl implements QuoteService
             if (quoterepos.findById(id).get().getUser().getUsername().equalsIgnoreCase(authentication.getName()))
             {
                 quoterepos.deleteById(id);
-            }
-            else
+            } else
             {
-                throw new EntityNotFoundException(Long.toString(id) + " " + authentication.getName());
+                throw new EntityNotFoundException(id + " " + authentication.getName());
             }
-        }
-        else
+        } else
         {
             throw new EntityNotFoundException(Long.toString(id));
         }
