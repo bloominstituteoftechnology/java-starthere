@@ -1,12 +1,12 @@
 package com.lambdaschool.starthere.services;
 
+import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
 import com.lambdaschool.starthere.models.Role;
 import com.lambdaschool.starthere.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService
     @Override
     public Role findRoleById(long id)
     {
-        return rolerepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return rolerepos.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
     }
 
     @Override
@@ -41,14 +41,14 @@ public class RoleServiceImpl implements RoleService
             return rr;
         } else
         {
-            throw new EntityNotFoundException(name);
+            throw new ResourceNotFoundException(name);
         }
     }
 
     @Override
     public void delete(long id)
     {
-        rolerepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        rolerepos.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
         rolerepos.deleteById(id);
     }
 

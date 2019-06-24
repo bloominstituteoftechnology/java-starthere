@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.services;
 
+import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
 import com.lambdaschool.starthere.models.Quote;
 import com.lambdaschool.starthere.models.User;
 import com.lambdaschool.starthere.models.UserRoles;
@@ -14,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserDetailsService, UserService
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
     }
 
-    public User findUserById(long id) throws EntityNotFoundException
+    public User findUserById(long id) throws ResourceNotFoundException
     {
-        return userrepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return userrepos.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
     }
 
     public List<User> findAll()
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
             userrepos.deleteById(id);
         } else
         {
-            throw new EntityNotFoundException(Long.toString(id));
+            throw new ResourceNotFoundException(Long.toString(id));
         }
     }
 
@@ -134,11 +134,11 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 return userrepos.save(currentUser);
             } else
             {
-                throw new EntityNotFoundException(id + " Not current user");
+                throw new ResourceNotFoundException(id + " Not current user");
             }
         } else
         {
-            throw new EntityNotFoundException(authentication.getName());
+            throw new ResourceNotFoundException(authentication.getName());
         }
 
     }

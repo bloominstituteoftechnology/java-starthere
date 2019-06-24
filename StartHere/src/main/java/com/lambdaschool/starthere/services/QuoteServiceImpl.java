@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.services;
 
+import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
 import com.lambdaschool.starthere.models.Quote;
 import com.lambdaschool.starthere.repository.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class QuoteServiceImpl implements QuoteService
     @Override
     public Quote findQuoteById(long id)
     {
-        return quoterepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+        return quoterepos.findById(id).orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
     }
 
     @Override
@@ -43,11 +43,11 @@ public class QuoteServiceImpl implements QuoteService
                 quoterepos.deleteById(id);
             } else
             {
-                throw new EntityNotFoundException(id + " " + authentication.getName());
+                throw new ResourceNotFoundException(id + " " + authentication.getName());
             }
         } else
         {
-            throw new EntityNotFoundException(Long.toString(id));
+            throw new ResourceNotFoundException(Long.toString(id));
         }
     }
 
