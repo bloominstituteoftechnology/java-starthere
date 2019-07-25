@@ -35,7 +35,7 @@ public class APIsController
                                                 @PathVariable
                                                         String isbn)
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         String requestURL = "https://openlibrary.org/api/books?bibkeys=" + "ISBN:" + isbn + "&format=json";
 
