@@ -21,7 +21,6 @@ public class StartHereApplication
 
         DispatcherServlet dispatcherServlet = (DispatcherServlet) ctx.getBean("dispatcherServlet");
         dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-
     }
 
 }

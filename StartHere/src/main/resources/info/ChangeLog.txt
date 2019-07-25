@@ -8,6 +8,14 @@ June 23
 
 * Added Access to OpenLibrary API
 
+July 24
+
+* Configured H2 / PostgreSQL to use environment variables
+* Configured an application.properties switch to change DBs
+* mapped /oauth/token to /login
+
 Todo
 
-Swagger
+Custom Swagger
+Testing
+

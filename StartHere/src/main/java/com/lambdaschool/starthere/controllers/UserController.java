@@ -33,7 +33,7 @@ public class UserController
                 produces = {"application/json"})
     public ResponseEntity<?> listAllUsers(HttpServletRequest request)
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<User> myUsers = userService.findAll();
         return new ResponseEntity<>(myUsers, HttpStatus.OK);
@@ -47,7 +47,7 @@ public class UserController
                                      @PathVariable
                                              Long userId)
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         User u = userService.findUserById(userId);
         return new ResponseEntity<>(u, HttpStatus.OK);
@@ -59,7 +59,7 @@ public class UserController
     @ResponseBody
     public ResponseEntity<?> getCurrentUserName(HttpServletRequest request, Authentication authentication)
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         return new ResponseEntity<>(authentication.getPrincipal(), HttpStatus.OK);
     }
@@ -73,7 +73,7 @@ public class UserController
     @RequestBody
             User newuser) throws URISyntaxException
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newuser = userService.save(newuser);
 
@@ -93,7 +93,7 @@ public class UserController
                                         @PathVariable
                                                 long id)
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         userService.update(updateUser, id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -106,7 +106,7 @@ public class UserController
                                             @PathVariable
                                                     long id)
     {
-        logger.trace(request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

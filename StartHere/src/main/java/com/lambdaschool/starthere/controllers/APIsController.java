@@ -1,7 +1,5 @@
 package com.lambdaschool.starthere.controllers;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lambdaschool.starthere.models.APIOpenLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,17 +31,18 @@ public class APIsController
 
     @GetMapping(value = "/openlibrary/{isbn}",
                 produces = {"application/json"})
-    public ResponseEntity<?> listABookGivenISBN(HttpServletRequest request, @PathVariable String isbn)
+    public ResponseEntity<?> listABookGivenISBN(HttpServletRequest request,
+                                                @PathVariable
+                                                        String isbn)
     {
         logger.trace(request.getRequestURI() + " accessed");
 
         String requestURL = "https://openlibrary.org/api/books?bibkeys=" + "ISBN:" + isbn + "&format=json";
 
-        ParameterizedTypeReference<Map<String, APIOpenLibrary>> responseType =
-                new ParameterizedTypeReference<Map<String, APIOpenLibrary>>() {};
-        ResponseEntity<Map<String, APIOpenLibrary>> responseEntity =
-                restTemplate.exchange(requestURL,
-                        HttpMethod.GET, null, responseType);
+        ParameterizedTypeReference<Map<String, APIOpenLibrary>> responseType = new ParameterizedTypeReference<Map<String, APIOpenLibrary>>()
+        {
+        };
+        ResponseEntity<Map<String, APIOpenLibrary>> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
 
         Map<String, APIOpenLibrary> ourBooks = responseEntity.getBody();
 
