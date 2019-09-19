@@ -29,3 +29,30 @@ curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c
 *** using a different host
 
 curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://jrmmba-starthere.herokuapp.com/oauth/token
+
+
+
+
+{
+        "username": "cinnamon",
+        "userRoles": [
+            {
+                "role": {
+                    "roleid": 1,
+                    "name": "admin"
+                }
+            },
+            {
+                "role": {
+                    "roleid": 2,
+                    "name": "user"
+                }
+            },
+            {
+                "role": {
+                    "roleid": 3,
+                    "name": "data"
+                }
+            }
+        ]
+}

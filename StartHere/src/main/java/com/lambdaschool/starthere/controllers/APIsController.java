@@ -35,7 +35,8 @@ public class APIsController
                                                 @PathVariable
                                                         String isbn)
     {
-        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         String requestURL = "https://openlibrary.org/api/books?bibkeys=" + "ISBN:" + isbn + "&format=json";
 
@@ -45,6 +46,8 @@ public class APIsController
         ResponseEntity<Map<String, APIOpenLibrary>> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
 
         Map<String, APIOpenLibrary> ourBooks = responseEntity.getBody();
+
+        // goodreads
 
         System.out.println(ourBooks);
         return new ResponseEntity<>(ourBooks, HttpStatus.OK);

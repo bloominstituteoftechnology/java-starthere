@@ -29,7 +29,8 @@ public class RolesController
                 produces = {"application/json"})
     public ResponseEntity<?> listRoles(HttpServletRequest request)
     {
-        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Role> allRoles = roleService.findAll();
         return new ResponseEntity<>(allRoles, HttpStatus.OK);
@@ -38,13 +39,27 @@ public class RolesController
 
     @GetMapping(value = "/role/{roleId}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getRole(HttpServletRequest request,
-                                     @PathVariable
-                                             Long roleId)
+    public ResponseEntity<?> getRoleById(HttpServletRequest request,
+                                         @PathVariable
+                                                 Long roleId)
     {
-        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Role r = roleService.findRoleById(roleId);
+        return new ResponseEntity<>(r, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/role/name/{roleName}",
+                produces = {"application/json"})
+    public ResponseEntity<?> getRoleByName(HttpServletRequest request,
+                                           @PathVariable
+                                                   String roleName)
+    {
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
+        Role r = roleService.findByName(roleName);
         return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
@@ -54,13 +69,17 @@ public class RolesController
     @RequestBody
             Role newRole) throws URISyntaxException
     {
-        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newRole = roleService.save(newRole);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newRoleURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{roleid}").buildAndExpand(newRole.getRoleid()).toUri();
+        URI newRoleURI = ServletUriComponentsBuilder.fromCurrentRequest()
+                                                    .path("/{roleid}")
+                                                    .buildAndExpand(newRole.getRoleid())
+                                                    .toUri();
         responseHeaders.setLocation(newRoleURI);
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
@@ -71,7 +90,8 @@ public class RolesController
                                             @PathVariable
                                                     long id)
     {
-        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         roleService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

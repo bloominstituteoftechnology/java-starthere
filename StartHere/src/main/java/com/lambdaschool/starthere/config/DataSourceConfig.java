@@ -1,8 +1,14 @@
 package com.lambdaschool.starthere.config;
 
+import com.lambdaschool.starthere.StartHereApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -13,6 +19,21 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfig
 {
+    private static final Logger logger = LoggerFactory.getLogger(StartHereApplication.class);
+    private static boolean stop = false;
+
+    @Autowired
+    private ApplicationContext appContext;
+
+    private static void checkEnvironmentVariable(String envvar)
+    {
+        if (System.getenv(envvar) == null)
+        {
+            logger.error("Environment Variable " + envvar + " missing");
+            stop = true;
+        }
+    }
+
     @Autowired
     private Environment env;
 
@@ -28,6 +49,18 @@ public class DataSourceConfig
 
         if (dbValue.equalsIgnoreCase("POSTGRESQL"))
         {
+            checkEnvironmentVariable("MYDBHOST");
+            checkEnvironmentVariable("MYDBNAME");
+            checkEnvironmentVariable("MYDBUSER");
+            checkEnvironmentVariable("MYDBPASSWORD");
+
+            if (stop)
+            {
+                logger.info("Manually shutting down system");
+                int exitCode = SpringApplication.exit(appContext, (ExitCodeGenerator) () -> 1);
+                System.exit(exitCode);
+            }
+
             myUrlString = "jdbc:postgresql://" + System.getenv("MYDBHOST") + ":5432/" + System.getenv("MYDBNAME");
             myDriverClass = "org.postgresql.Driver";
             myDBUser = System.getenv("MYDBUSER");
@@ -41,8 +74,13 @@ public class DataSourceConfig
             myDBPassword = "";
         }
 
-        System.out.println(myUrlString);
-        return DataSourceBuilder.create().username(myDBUser).password(myDBPassword).url(myUrlString).driverClassName(myDriverClass).build();
+        logger.info("Database URL is " + myUrlString);
+        return DataSourceBuilder.create()
+                                .username(myDBUser)
+                                .password(myDBPassword)
+                                .url(myUrlString)
+                                .driverClassName(myDriverClass)
+                                .build();
     }
 
     @Bean(name = "jdbcCustom")
