@@ -12,7 +12,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
-@EnableJpaAuditing
+//@EnableJpaAuditing
 @SpringBootApplication
 public class StartHereApplication
 {

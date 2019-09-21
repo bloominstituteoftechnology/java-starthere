@@ -3,6 +3,7 @@ package com.lambdaschool.starthere.services;
 import com.lambdaschool.starthere.models.Book;
 import com.lambdaschool.starthere.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class BookServiceImpl implements BookService
     BookRepository bookres;
 
     @Override
-    public List<Book> findAll()
+    public List<Book> findAll(Pageable pageable)
     {
         List<Book> myBooks = new ArrayList();
         bookres.findAll().iterator().forEachRemaining(myBooks::add);

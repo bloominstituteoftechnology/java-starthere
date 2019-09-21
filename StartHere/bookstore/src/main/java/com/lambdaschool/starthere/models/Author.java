@@ -1,7 +1,12 @@
 package com.lambdaschool.starthere.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 
+@ApiModel(value = "Author", description ="The Author Entity")
 @Entity
 @Table(name = "authors")
 public class Author extends Auditable
@@ -11,10 +16,18 @@ public class Author extends Auditable
     private long authorid;
 
 
+    @ManyToMany(mappedBy = "author ",
+                cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("author")
+
+    @ApiModelProperty(name = "first name", value = "First Name", required= true, example="Michael")
     @Column(unique = true, nullable= false)
-    private String firstname;
+    private String fname;
     //first name of the author
-    private String lastname;
+
+    @ApiModelProperty(name = "last name", value = "Last Name", required= true, example="Johnson")
+    @Column(unique = true, nullable = false)
+    private String lname;
     //last name of the author
 
 
@@ -28,23 +41,23 @@ public class Author extends Auditable
         this.authorid = authorid;
     }
 
-    public String getFirstname()
+    public String getFname()
     {
-        return firstname;
+        return fname;
     }
 
-    public void setFirstname(String firstname)
+    public void setFname(String fname)
     {
-        this.firstname = firstname;
+        this.fname = fname;
     }
 
-    public String getLastname()
+    public String getLname()
     {
-        return lastname;
+        return lname;
     }
 
-    public void setLastname(String lastname)
+    public void setLname(String lname)
     {
-        this.lastname = lastname;
+        this.lname = lname;
     }
 }
