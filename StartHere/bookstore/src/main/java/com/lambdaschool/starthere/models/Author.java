@@ -30,6 +30,9 @@ public class Author extends Auditable
     private String lname;
     //last name of the author
 
+    public Author()
+    {
+    }
 
     public long getAuthorid()
     {

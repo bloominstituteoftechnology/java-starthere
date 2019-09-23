@@ -136,7 +136,7 @@
 
     <build>
 <!--        <finalName>${project.artifactId}</finalName>-->
-        <finalName>jrmmba-oauthmin</finalName>
+        <finalName>marcus-starthere</finalName>
 
         <plugins>
             <plugin>

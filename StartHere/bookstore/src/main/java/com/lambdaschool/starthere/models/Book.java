@@ -36,7 +36,9 @@ public class Book extends Auditable
     private int copy;
     // the year the book was published (copyright date)
 
-
+    public  Book()
+    {
+    }
 
     public long getBookid()
     {
@@ -77,4 +79,6 @@ public class Book extends Auditable
     {
         this.copy = copy;
     }
+
+
 }
