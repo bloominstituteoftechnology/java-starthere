@@ -1,58 +1,61 @@
-curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://localhost:2019/oauth/token
+// admins access token = 56ab5075-de2e-43ba-a407-e52b8f267ac7
+// barnbarns access token = a87cdc74-7188-43d7-9c2e-f689841f083f
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/users
+// get admins access code
+curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://localhost:2019/login
 
-curl -X POST --user "lambda-client:lambda-secret" -d 'grant_type=password&username=barnbarn&password=ILuvM4th!' http://localhost:2019/oauth/token
+// this works
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/users
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer acd0586d-fc11-4715-a2ae-9acab553672c" http://localhost:2019/users/users
+// get users access code
+curl -X POST --user "lambda-client:lambda-secret" -d 'grant_type=password&username=barnbarn&password=ILuvM4th!' http://localhost:2019/login
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/users
+// this has an authentication error
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer a87cdc74-7188-43d7-9c2e-f689841f083f" http://localhost:2019/users/users
 
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" -d "{ \"username\":\"snoopy\", \"password\":\"password\", \"roleid\":"1" }" http://localhost:2019/users/user
+// switch back to admins access code and this works
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/users
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/users
+// add snoopy as a user
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" -d "{ \"username\":\"snoopy\", \"password\":\"password\", \"roleid\":"1" }" http://localhost:2019/users/user
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/14
+// look up users and find snoopy's id
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/users
 
-curl -X DELETE -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/14
+// delete snoopy user
+curl -X DELETE -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/user/15
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/14
+// verify that snoopy is deleted
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/user/15
 
+// add ginger a new user
 curl -X POST -H "Content-Type: application/json" -d "{\"username\": \"Ginger\", \"password\": \"EATEATEAT\"}" http://localhost:2019/createnewuser
 
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" -d "{ \"username\": \"Snoopy\", \"password\": \"password\", \"userRoles\": [ { \"role\": { \"roleid\": 1 } } ], \"quotes\": [ { \"quote\": \"The Red Baron\" } ]}" http://localhost:2019/users/user
+// add snoopy again with full information
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" -d "{ \"username\": \"Snoopy\", \"password\": \"password\", \"userRoles\": [ { \"role\": { \"roleid\": 1 } } ], \"useremails\": [ { \"useremail\": \"myemail@local.home\" } ]}" http://localhost:2019/users/user
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/users/user/15
+// look at all users and verify that snoopy and ginger are available
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/users
 
-curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d781956f-32c1-46c3-a531-dc8f64466f7b" http://localhost:2019/oauth/revoke-token
+// revokes token for admin
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/oauth/revoke-token
+
+// this should fail with invalid token
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 56ab5075-de2e-43ba-a407-e52b8f267ac7" http://localhost:2019/users/users
+
+// get admins access code
+curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://localhost:2019/login
+
+// look at all users and ginger's id
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 3d28337c-b699-4ae6-86fe-4961f42b1142" http://localhost:2019/users/users
+
+// add email to ginger
+curl -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer 3d28337c-b699-4ae6-86fe-4961f42b1142" -d  "{ \"userid\": 16, \"useremails\": [ { \"useremail\": \"whisker@home.local\" } ] }" http://localhost:2019/users/user/16
+
+// look at all users and ginger's emails
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 3d28337c-b699-4ae6-86fe-4961f42b1142" http://localhost:2019/users/users
 
 *** using a different host
 
+// sign on admin when on heroku
 curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" http://jrmmba-starthere.herokuapp.com/oauth/token
-
-
-
-
-{
-        "username": "cinnamon",
-        "userRoles": [
-            {
-                "role": {
-                    "roleid": 1,
-                    "name": "admin"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 2,
-                    "name": "user"
-                }
-            },
-            {
-                "role": {
-                    "roleid": 3,
-                    "name": "data"
-                }
-            }
-        ]
-}

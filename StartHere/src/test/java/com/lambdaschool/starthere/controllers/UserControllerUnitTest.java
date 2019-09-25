@@ -289,9 +289,8 @@ public class UserControllerUnitTest
     {
         String apiUrl = "/users/user/{userid}/role/{roleid}";
 
-        RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl, 3, 2)
-                                                  .contentType(MediaType.APPLICATION_JSON)
-                                                  .accept(MediaType.APPLICATION_JSON);
+        RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl, 3, 2);
+
         mockMvc.perform(rb)
                .andExpect(status().is2xxSuccessful())
                .andDo(MockMvcResultHandlers.print());
@@ -300,7 +299,14 @@ public class UserControllerUnitTest
     // @PostMapping("/user/{userid}/role/{roleid}")
     // userService.addUserRole(userid, roleid);
     @Test
-    public void postUserRoleByIds()
+    public void postUserRoleByIds() throws Exception
     {
+        String apiUrl = "/users/user/{userid}/role/{roleid}";
+
+        RequestBuilder rb = MockMvcRequestBuilders.post(apiUrl, 3, 2);
+
+        mockMvc.perform(rb)
+               .andExpect(status().is2xxSuccessful())
+               .andDo(MockMvcResultHandlers.print());
     }
 }

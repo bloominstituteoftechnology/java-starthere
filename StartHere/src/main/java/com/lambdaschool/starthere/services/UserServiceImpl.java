@@ -126,10 +126,12 @@ public class UserServiceImpl implements UserDetailsService,
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
 
-        User currentUser = userrepos.findByUsername(authentication.getName());
+        User authenticatedUser = userrepos.findByUsername(authentication.getName());
 
-        if (id == currentUser.getUserid() || isAdmin)
+        if (id == authenticatedUser.getUserid() || isAdmin)
         {
+            User currentUser = findUserById(id);
+
             if (user.getUsername() != null)
             {
                 currentUser.setUsername(user.getUsername());
