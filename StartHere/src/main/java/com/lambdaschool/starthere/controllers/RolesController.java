@@ -33,7 +33,8 @@ public class RolesController
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Role> allRoles = roleService.findAll();
-        return new ResponseEntity<>(allRoles, HttpStatus.OK);
+        return new ResponseEntity<>(allRoles,
+                                    HttpStatus.OK);
     }
 
 
@@ -47,7 +48,8 @@ public class RolesController
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Role r = roleService.findRoleById(roleId);
-        return new ResponseEntity<>(r, HttpStatus.OK);
+        return new ResponseEntity<>(r,
+                                    HttpStatus.OK);
     }
 
     @GetMapping(value = "/role/name/{roleName}",
@@ -60,14 +62,16 @@ public class RolesController
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Role r = roleService.findByName(roleName);
-        return new ResponseEntity<>(r, HttpStatus.OK);
+        return new ResponseEntity<>(r,
+                                    HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/role")
-    public ResponseEntity<?> addNewRole(HttpServletRequest request, @Valid
-    @RequestBody
-            Role newRole) throws URISyntaxException
+    public ResponseEntity<?> addNewRole(HttpServletRequest request,
+                                        @Valid
+                                        @RequestBody
+                                                Role newRole) throws URISyntaxException
     {
         logger.trace(request.getMethod()
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
@@ -82,7 +86,9 @@ public class RolesController
                                                     .toUri();
         responseHeaders.setLocation(newRoleURI);
 
-        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(null,
+                                    responseHeaders,
+                                    HttpStatus.CREATED);
     }
 
     @DeleteMapping("/role/{id}")

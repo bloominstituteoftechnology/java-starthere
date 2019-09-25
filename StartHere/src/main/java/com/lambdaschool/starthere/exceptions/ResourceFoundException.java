@@ -13,8 +13,10 @@ public class ResourceFoundException extends RuntimeException
         super(message);
     }
 
-    public ResourceFoundException(String message, Throwable cause)
+    public ResourceFoundException(String message,
+                                  Throwable cause)
     {
-        super(message, cause);
+        super(message,
+              cause);
     }
 }

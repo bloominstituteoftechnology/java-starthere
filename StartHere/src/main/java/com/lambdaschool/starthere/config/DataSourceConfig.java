@@ -24,6 +24,8 @@ public class DataSourceConfig
 
     @Autowired
     private ApplicationContext appContext;
+    @Autowired
+    private Environment env;
 
     private static void checkEnvironmentVariable(String envvar)
     {
@@ -33,9 +35,6 @@ public class DataSourceConfig
             stop = true;
         }
     }
-
-    @Autowired
-    private Environment env;
 
     @Bean(name = "dsCustom")
     public DataSource dataSource()
@@ -57,7 +56,8 @@ public class DataSourceConfig
             if (stop)
             {
                 logger.info("Manually shutting down system");
-                int exitCode = SpringApplication.exit(appContext, (ExitCodeGenerator) () -> 1);
+                int exitCode = SpringApplication.exit(appContext,
+                                                      (ExitCodeGenerator) () -> 1);
                 System.exit(exitCode);
             }
 

@@ -21,7 +21,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     static final String GRANT_TYPE_PASSWORD = "password";
     static final String AUTHORIZATION_CODE = "authorization_code";
-    static final String REFRESH_TOKEN = "refresh_token";
     static final String IMPLICIT = "implicit";
     static final String SCOPE_READ = "read";
     static final String SCOPE_WRITE = "write";
@@ -45,8 +44,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         configurer.inMemory()
                   .withClient(CLIENT_ID)
                   .secret(encoder.encode(CLIENT_SECRET))
-                  .authorizedGrantTypes(GRANT_TYPE_PASSWORD, AUTHORIZATION_CODE, IMPLICIT)
-                  .scopes(SCOPE_READ, SCOPE_WRITE, TRUST)
+                  .authorizedGrantTypes(GRANT_TYPE_PASSWORD,
+                                        AUTHORIZATION_CODE,
+                                        IMPLICIT)
+                  .scopes(SCOPE_READ,
+                          SCOPE_WRITE,
+                          TRUST)
                   .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS);
     }
 
@@ -55,6 +58,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     {
         endpoints.tokenStore(tokenStore)
                  .authenticationManager(authenticationManager);
-        endpoints.pathMapping("/oauth/token", "/login");
+        endpoints.pathMapping("/oauth/token",
+                              "/login");
     }
 }

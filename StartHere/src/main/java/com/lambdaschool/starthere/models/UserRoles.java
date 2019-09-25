@@ -26,7 +26,8 @@ public class UserRoles extends Auditable implements Serializable
     {
     }
 
-    public UserRoles(User user, Role role)
+    public UserRoles(User user,
+                     Role role)
     {
         this.user = user;
         this.role = role;
@@ -70,7 +71,8 @@ public class UserRoles extends Auditable implements Serializable
     @Override
     public int hashCode()
     {
-        return Objects.hash(getUser(), getRole());
+        return Objects.hash(getUser(),
+                            getRole());
     }
 
     @Override

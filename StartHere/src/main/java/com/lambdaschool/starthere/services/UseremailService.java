@@ -12,7 +12,9 @@ public interface UseremailService
 
     List<Useremail> findByUserName(String username);
 
-    void delete(long id, boolean isAdmin);
+    void delete(long id,
+                boolean isAdmin);
 
-    Useremail save(Useremail useremail, boolean isAdmin);
+    Useremail save(Useremail useremail,
+                   boolean isAdmin);
 }

@@ -27,7 +27,8 @@ public class Useremail extends Auditable
     {
     }
 
-    public Useremail(User user, String useremail)
+    public Useremail(User user,
+                     String useremail)
     {
         this.useremail = useremail;
         this.user = user;

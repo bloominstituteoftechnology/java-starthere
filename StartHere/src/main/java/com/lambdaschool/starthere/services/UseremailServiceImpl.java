@@ -41,7 +41,8 @@ public class UseremailServiceImpl implements UseremailService
     }
 
     @Override
-    public void delete(long id, boolean isAdmin)
+    public void delete(long id,
+                       boolean isAdmin)
     {
         if (useremailrepos.findById(id)
                           .isPresent())
@@ -66,7 +67,8 @@ public class UseremailServiceImpl implements UseremailService
     }
 
     @Override
-    public Useremail save(Useremail useremail, boolean isAdmin)
+    public Useremail save(Useremail useremail,
+                          boolean isAdmin)
     {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();

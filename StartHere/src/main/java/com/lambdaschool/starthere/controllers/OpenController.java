@@ -1,30 +1,27 @@
 package com.lambdaschool.starthere.controllers;
 
 import com.lambdaschool.starthere.models.User;
+import com.lambdaschool.starthere.models.UserMinimum;
 import com.lambdaschool.starthere.models.UserRoles;
 import com.lambdaschool.starthere.services.RoleService;
 import com.lambdaschool.starthere.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-
-// in order to return an auth token
-// client goes to this end point
-// client then goes to login end point
+import java.util.List;
 
 @RestController
 public class OpenController
@@ -40,29 +37,78 @@ public class OpenController
     @PostMapping(value = "/createnewuser",
                  consumes = {"application/json"},
                  produces = {"application/json"})
-    public ResponseEntity<?> addNewUser(HttpServletRequest request, @Valid
-    @RequestBody
-            User newuser) throws URISyntaxException
+    public ResponseEntity<?> addNewUser(HttpServletRequest httpServletRequest,
+                                        @RequestParam(defaultValue = "false")
+                                                boolean getaccess,
+                                        @Valid
+                                        @RequestBody
+                                                UserMinimum newminuser) throws URISyntaxException
     {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+        logger.trace(httpServletRequest.getMethod()
+                                       .toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
+
+        // Create the user
+        User newuser = new User();
+
+        newuser.setUsername(newminuser.getUsername());
+        newuser.setPassword(newminuser.getPassword());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(newuser, roleService.findByName("user")));
+        newRoles.add(new UserRoles(newuser,
+                                   roleService.findByName("user")));
         newuser.setUserroles(newRoles);
 
         newuser = userService.save(newuser);
 
         // set the location header for the newly created resource - to another controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newRestaurantURI = ServletUriComponentsBuilder.fromUriString(request.getServerName() + ":" + request.getLocalPort() + "/users/user/{userId}")
-                                                          .buildAndExpand(newuser.getUserid())
-                                                          .toUri();
-        responseHeaders.setLocation(newRestaurantURI);
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+                                                    .buildAndExpand(newuser.getUserid())
+                                                    .toUri();
+        responseHeaders.setLocation(newUserURI);
 
-        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+        String theToken = "";
+        if (getaccess)
+        {
+            // return the access token
+            RestTemplate restTemplate = new RestTemplate();
+            String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+
+            List<MediaType> acceptableMediaTypes = new ArrayList<>();
+            acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.setAccept(acceptableMediaTypes);
+            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+                                 System.getenv("OAUTHCLIENTSECRET"));
+
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("grant_type",
+                    "password");
+            map.add("scope",
+                    "read write trust");
+            map.add("username",
+                    newminuser.getUsername());
+            map.add("password",
+                    newminuser.getPassword());
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
+                                                                                 headers);
+
+            theToken = restTemplate.postForObject(requestURI,
+                                                  request,
+                                                  String.class);
+        } else
+        {
+            // nothing;
+        }
+        return new ResponseEntity<>(theToken,
+                                    responseHeaders,
+                                    HttpStatus.CREATED);
     }
 
+    @ApiIgnore
     @GetMapping("favicon.ico")
     void returnNoFavicon()
     {

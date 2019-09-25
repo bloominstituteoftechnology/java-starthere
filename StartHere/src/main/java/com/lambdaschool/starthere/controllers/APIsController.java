@@ -43,13 +43,15 @@ public class APIsController
         ParameterizedTypeReference<Map<String, APIOpenLibrary>> responseType = new ParameterizedTypeReference<Map<String, APIOpenLibrary>>()
         {
         };
-        ResponseEntity<Map<String, APIOpenLibrary>> responseEntity = restTemplate.exchange(requestURL, HttpMethod.GET, null, responseType);
+        ResponseEntity<Map<String, APIOpenLibrary>> responseEntity = restTemplate.exchange(requestURL,
+                                                                                           HttpMethod.GET,
+                                                                                           null,
+                                                                                           responseType);
 
         Map<String, APIOpenLibrary> ourBooks = responseEntity.getBody();
 
-        // goodreads
-
         System.out.println(ourBooks);
-        return new ResponseEntity<>(ourBooks, HttpStatus.OK);
+        return new ResponseEntity<>(ourBooks,
+                                    HttpStatus.OK);
     }
 }

@@ -1,25 +1,20 @@
-Starting June 20, 2019
-
-* Remove generation of refresh token for oauth2
-* Reading Client Id and Secret from environment variables
-* Changed EntityNotFoundException to ResourceNotFoundException
-
-June 23
-
-* Added Access to OpenLibrary API
-
-July 24
-
-* Configured H2 / PostgreSQL to use environment variables
-* Configured an application.properties switch to change DBs
-* mapped /oauth/token to /login
-
-July 25
-
-* Began adding tests
+September 28, 2019
+A complete overhaul of the code so am restarting this list...
 
 Todo
 
 Custom Swagger
+    Swagger for login
+        Remove custom error
+        Make class for user documentation
+        Find error responses and use those
+            Wrong client
+            Wrong user
+    Swagger for custom request body
+    Paging
+    Mass Seeding
+    redo curl
+    javadocs
+
 Testing
 

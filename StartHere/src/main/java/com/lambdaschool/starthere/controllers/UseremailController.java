@@ -34,21 +34,23 @@ public class UseremailController
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Useremail> allQuotes = useremailService.findAll();
-        return new ResponseEntity<>(allQuotes, HttpStatus.OK);
+        return new ResponseEntity<>(allQuotes,
+                                    HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/useremail/{useremailId}",
                 produces = {"application/json"})
     public ResponseEntity<?> getUserEmailById(HttpServletRequest request,
-                                      @PathVariable
-                                              Long useremailId)
+                                              @PathVariable
+                                                      Long useremailId)
     {
         logger.trace(request.getMethod()
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Useremail ue = useremailService.findUseremailById(useremailId);
-        return new ResponseEntity<>(ue, HttpStatus.OK);
+        return new ResponseEntity<>(ue,
+                                    HttpStatus.OK);
     }
 
 
@@ -62,29 +64,34 @@ public class UseremailController
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Useremail> theUseremails = useremailService.findByUserName(userName);
-        return new ResponseEntity<>(theUseremails, HttpStatus.OK);
+        return new ResponseEntity<>(theUseremails,
+                                    HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/useremail")
-    public ResponseEntity<?> addNewQuote(HttpServletRequest request, @Valid
-    @RequestBody
-            Useremail newUseremail) throws URISyntaxException
+    public ResponseEntity<?> addNewQuote(HttpServletRequest request,
+                                         @Valid
+                                         @RequestBody
+                                                 Useremail newUseremail) throws URISyntaxException
     {
         logger.trace(request.getMethod()
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        newUseremail = useremailService.save(newUseremail, request.isUserInRole("ADMIN"));
+        newUseremail = useremailService.save(newUseremail,
+                                             request.isUserInRole("ADMIN"));
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUseremailURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                                                     .path("/{useremailid}")
-                                                     .buildAndExpand(newUseremail.getUseremailid())
-                                                     .toUri();
+                                                         .path("/{useremailid}")
+                                                         .buildAndExpand(newUseremail.getUseremailid())
+                                                         .toUri();
         responseHeaders.setLocation(newUseremailURI);
 
-        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(null,
+                                    responseHeaders,
+                                    HttpStatus.CREATED);
     }
 
 
@@ -96,7 +103,8 @@ public class UseremailController
         logger.trace(request.getMethod()
                             .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        useremailService.delete(useremailid, request.isUserInRole("ADMIN"));
+        useremailService.delete(useremailid,
+                                request.isUserInRole("ADMIN"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

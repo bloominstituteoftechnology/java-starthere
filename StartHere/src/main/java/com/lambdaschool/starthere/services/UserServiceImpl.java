@@ -22,7 +22,8 @@ import java.util.List;
 
 
 @Service(value = "userService")
-public class UserServiceImpl implements UserDetailsService, UserService
+public class UserServiceImpl implements UserDetailsService,
+        UserService
 {
 
     @Autowired
@@ -40,7 +41,9 @@ public class UserServiceImpl implements UserDetailsService, UserService
         {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                                                                      user.getPassword(),
+                                                                      user.getAuthority());
     }
 
     public User findUserById(long id) throws ResourceNotFoundException
@@ -99,26 +102,30 @@ public class UserServiceImpl implements UserDetailsService, UserService
                         .getRoleid();
             Role role = rolerepos.findById(id)
                                  .orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
-            newRoles.add(new UserRoles(newUser, ur.getRole()));
+            newRoles.add(new UserRoles(newUser,
+                                       ur.getRole()));
         }
         newUser.setUserroles(newRoles);
 
         for (Useremail ue : user.getUseremails())
         {
             newUser.getUseremails()
-                   .add(new Useremail(newUser, ue.getUseremail()));
+                   .add(new Useremail(newUser,
+                                      ue.getUseremail()));
         }
 
         return userrepos.save(newUser);
     }
 
-
     @Transactional
     @Override
-    public User update(User user, long id, boolean isAdmin)
+    public User update(User user,
+                       long id,
+                       boolean isAdmin)
     {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
+
         User currentUser = userrepos.findByUsername(authentication.getName());
 
         if (id == currentUser.getUserid() || isAdmin)
@@ -145,7 +152,8 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 for (Useremail ue : user.getUseremails())
                 {
                     currentUser.getUseremails()
-                               .add(new Useremail(currentUser, ue.getUseremail()));
+                               .add(new Useremail(currentUser,
+                                                  ue.getUseremail()));
                 }
             }
 
@@ -158,17 +166,20 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
     @Transactional
     @Override
-    public void deleteUserRole(long userid, long roleid)
+    public void deleteUserRole(long userid,
+                               long roleid)
     {
         userrepos.findById(userid)
                  .orElseThrow(() -> new ResourceNotFoundException("User id " + userid + " not found!"));
         rolerepos.findById(roleid)
                  .orElseThrow(() -> new ResourceNotFoundException("Role id " + roleid + " not found!"));
 
-        if (rolerepos.checkUserRolesCombo(userid, roleid)
+        if (rolerepos.checkUserRolesCombo(userid,
+                                          roleid)
                      .getCount() > 0)
         {
-            rolerepos.deleteUserRoles(userid, roleid);
+            rolerepos.deleteUserRoles(userid,
+                                      roleid);
         } else
         {
             throw new ResourceNotFoundException("Role and User Combination Does Not Exists");
@@ -177,17 +188,20 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
     @Transactional
     @Override
-    public void addUserRole(long userid, long roleid)
+    public void addUserRole(long userid,
+                            long roleid)
     {
         userrepos.findById(userid)
                  .orElseThrow(() -> new ResourceNotFoundException("User id " + userid + " not found!"));
         rolerepos.findById(roleid)
                  .orElseThrow(() -> new ResourceNotFoundException("Role id " + roleid + " not found!"));
 
-        if (rolerepos.checkUserRolesCombo(userid, roleid)
+        if (rolerepos.checkUserRolesCombo(userid,
+                                          roleid)
                      .getCount() <= 0)
         {
-            rolerepos.insertUserRoles(userid, roleid);
+            rolerepos.insertUserRoles(userid,
+                                      roleid);
         } else
         {
             throw new ResourceFoundException("Role and User Combination Already Exists");

@@ -78,7 +78,8 @@ public class RoleServiceImpl implements RoleService
                         .getUserid();
             User user = userrepos.findById(id)
                                  .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
-            newUsers.add(new UserRoles(ur.getUser(), newRole));
+            newUsers.add(new UserRoles(ur.getUser(),
+                                       newRole));
         }
         newRole.setUserroles(newUsers);
 

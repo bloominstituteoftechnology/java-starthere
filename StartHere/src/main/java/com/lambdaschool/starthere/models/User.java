@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,7 +43,9 @@ public class User extends Auditable
     {
     }
 
-    public User(String username, String password, List<UserRoles> userRoles)
+    public User(String username,
+                String password,
+                List<UserRoles> userRoles)
     {
         setUsername(username);
         setPassword(password);
@@ -70,7 +73,7 @@ public class User extends Auditable
 
     public void setUsername(String username)
     {
-        this.username = username;
+        this.username = username.toLowerCase();
     }
 
     public String getPassword()
@@ -109,6 +112,7 @@ public class User extends Auditable
         this.useremails = useremails;
     }
 
+    @JsonIgnore
     public List<SimpleGrantedAuthority> getAuthority()
     {
         List<SimpleGrantedAuthority> rtnList = new ArrayList<>();

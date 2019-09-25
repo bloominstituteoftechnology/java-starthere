@@ -2,13 +2,13 @@ package com.lambdaschool.starthere.models;
 
 
 import com.lambdaschool.starthere.exceptions.ValidationError;
+import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 // adapted from https://tools.ietf.org/html/rfc7807
 public class ErrorDetail

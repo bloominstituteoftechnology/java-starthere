@@ -38,7 +38,8 @@ public class StartHereApplication
 
         if (!stop)
         {
-            ApplicationContext ctx = SpringApplication.run(StartHereApplication.class, args);
+            ApplicationContext ctx = SpringApplication.run(StartHereApplication.class,
+                                                           args);
 
             DispatcherServlet dispatcherServlet = (DispatcherServlet) ctx.getBean("dispatcherServlet");
             dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);

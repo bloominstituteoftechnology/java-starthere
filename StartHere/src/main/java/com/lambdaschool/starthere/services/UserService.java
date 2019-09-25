@@ -19,9 +19,13 @@ public interface UserService
 
     User save(User user);
 
-    User update(User user, long id, boolean isAdmin);
+    User update(User user,
+                long id,
+                boolean isAdmin);
 
-    void deleteUserRole(long userid, long roleid);
+    void deleteUserRole(long userid,
+                        long roleid);
 
-    void addUserRole(long userid, long roleid);
+    void addUserRole(long userid,
+                     long roleid);
 }
