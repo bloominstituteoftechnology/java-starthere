@@ -9,6 +9,7 @@ import com.lambdaschool.starthere.models.Useremail;
 import com.lambdaschool.starthere.repository.RoleRepository;
 import com.lambdaschool.starthere.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,10 +54,17 @@ public class UserServiceImpl implements UserDetailsService,
     }
 
     @Override
-    public List<User> findAll()
+    public List<User> findByNameContaining(String username,
+                                           Pageable pageable)
+    {
+        return userrepos.findByUsernameContainingIgnoreCase(username, pageable);
+    }
+
+    @Override
+    public List<User> findAll(Pageable pageable)
     {
         List<User> list = new ArrayList<>();
-        userrepos.findAll()
+        userrepos.findAll(pageable)
                  .iterator()
                  .forEachRemaining(list::add);
         return list;

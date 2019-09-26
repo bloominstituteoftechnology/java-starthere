@@ -16,6 +16,7 @@ import org.junit.runners.MethodSorters;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -76,21 +77,21 @@ public class UserServiceImplUnitTest
     @Test
     public void C_findAll()
     {
-        assertEquals(5, userService.findAll().size());
+        assertEquals(5, userService.findAll(Pageable.unpaged()).size());
     }
 
     @Test
     public void D_delete()
     {
         userService.delete(13);
-        assertEquals(4, userService.findAll().size());
+        assertEquals(4, userService.findAll(Pageable.unpaged()).size());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void DA_notFoundDelete()
     {
         userService.delete(100);
-        assertEquals(4, userService.findAll().size());
+        assertEquals(4, userService.findAll(Pageable.unpaged()).size());
     }
 
     @Test

@@ -4,17 +4,5 @@ A complete overhaul of the code so am restarting this list...
 Todo
 
 Custom Swagger
-    Swagger for login
-        Remove custom error
-        Make class for user documentation
-        Find error responses and use those
-            Wrong client
-            Wrong user
     Swagger for custom request body
-    Paging
-    Mass Seeding
-    redo curl
     javadocs
-
-Testing
-

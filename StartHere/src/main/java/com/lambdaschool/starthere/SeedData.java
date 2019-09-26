@@ -1,5 +1,8 @@
 package com.lambdaschool.starthere;
 
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
 import com.lambdaschool.starthere.models.Role;
 import com.lambdaschool.starthere.models.User;
 import com.lambdaschool.starthere.models.UserRoles;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 @Transactional
 @Component
@@ -90,7 +94,7 @@ public class SeedData implements CommandLineRunner
         users = new ArrayList<>();
         users.add(new UserRoles(new User(),
                                 r2));
-        User u4 = new User("Bob",
+        User u4 = new User("puttat",
                            "password",
                            users);
         userService.save(u4);
@@ -98,9 +102,33 @@ public class SeedData implements CommandLineRunner
         users = new ArrayList<>();
         users.add(new UserRoles(new User(),
                                 r2));
-        User u5 = new User("Jane",
+        User u5 = new User("misskitty",
                            "password",
                            users);
         userService.save(u5);
+
+        // using JavaFaker create a bunch of regular users
+        // https://www.baeldung.com/java-faker
+        // https://www.baeldung.com/regular-expressions-java
+
+        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),
+                                                                    new RandomService());
+        Faker nameFaker = new Faker(new Locale("en-US"));
+
+        for (int i = 0; i < 100; i++)
+        {
+            User fakeUser = new User();
+
+            users = new ArrayList<>();
+            users.add(new UserRoles(new User(),
+                                    r2));
+            fakeUser = new User(nameFaker.name().username(),
+                                "password",
+                                users);
+            fakeUser.getUseremails()
+                    .add(new Useremail(fakeUser,
+                                       fakeValuesService.bothify("????##@gmail.com")));
+            userService.save(fakeUser);
+        }
     }
 }
