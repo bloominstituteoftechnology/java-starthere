@@ -25,6 +25,7 @@ public class RolesController
     @Autowired
     RoleService roleService;
 
+    // http://localhost:2019/roles/roles
     @GetMapping(value = "/roles",
                 produces = {"application/json"})
     public ResponseEntity<?> listRoles(HttpServletRequest request)
@@ -37,7 +38,7 @@ public class RolesController
                                     HttpStatus.OK);
     }
 
-
+    // http://localhost:2019/roles/role/3
     @GetMapping(value = "/role/{roleId}",
                 produces = {"application/json"})
     public ResponseEntity<?> getRoleById(HttpServletRequest request,
@@ -52,6 +53,7 @@ public class RolesController
                                     HttpStatus.OK);
     }
 
+    // http://localhost:2019/roles/role/name/data
     @GetMapping(value = "/role/name/{roleName}",
                 produces = {"application/json"})
     public ResponseEntity<?> getRoleByName(HttpServletRequest request,
@@ -66,7 +68,10 @@ public class RolesController
                                     HttpStatus.OK);
     }
 
-
+    // http://localhost:2019/roles/role
+    //    {
+    //        "name" : "ANewRole"
+    //    }
     @PostMapping(value = "/role")
     public ResponseEntity<?> addNewRole(HttpServletRequest request,
                                         @Valid
@@ -91,6 +96,27 @@ public class RolesController
                                     HttpStatus.CREATED);
     }
 
+
+    // http://localhost:2019/roles/role/3
+    //    {
+    //        "name" : "ANewRole"
+    //    }
+    @PutMapping(value = "/role/{roleid}")
+    public ResponseEntity<?> addNewRole(HttpServletRequest request,
+                                        @PathVariable long roleid,
+                                        @Valid
+                                        @RequestBody
+                                                Role newRole) throws URISyntaxException
+    {
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
+        newRole = roleService.update(roleid, newRole);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
+    // localhost:2019/roles/role/3
     @DeleteMapping("/role/{id}")
     public ResponseEntity<?> deleteRoleById(HttpServletRequest request,
                                             @PathVariable

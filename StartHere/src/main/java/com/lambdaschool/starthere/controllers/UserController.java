@@ -34,9 +34,9 @@ public class UserController
     @Autowired
     private UserService userService;
 
-    // http://localhost:2019/users/user/?page=1&size=1
-    // http://localhost:2019/users/user/?sort=usernamedesc&sort=<field>,asc
-    @ApiOperation(value = "returns all Restaurants",
+    // http://localhost:2019/users/users/?page=1&size=1
+    // http://localhost:2019/users/users/?sort=username,desc&sort=<field>,asc
+    @ApiOperation(value = "returns all Users",
                   response = User.class,
                   responseContainer = "List")
     @ApiImplicitParams({@ApiImplicitParam(name = "page",
@@ -66,7 +66,22 @@ public class UserController
                                     HttpStatus.OK);
     }
 
+    // http://localhost:2019/users/users/all
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping(value = "/users/all",
+                produces = {"application/json"})
+    public ResponseEntity<?> reallyListAllUsers(HttpServletRequest request)
+    {
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
+        List<User> myUsers = userService.findAll(Pageable.unpaged());
+        return new ResponseEntity<>(myUsers,
+                                    HttpStatus.OK);
+    }
+
+
+    // http://localhost:2019/users/user/7
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/{userId}",
                 produces = {"application/json"})
@@ -82,7 +97,7 @@ public class UserController
                                     HttpStatus.OK);
     }
 
-
+    // http://localhost:2019/users/user/name/cinnamon
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/name/{userName}",
                 produces = {"application/json"})
@@ -98,7 +113,41 @@ public class UserController
                                     HttpStatus.OK);
     }
 
+    // http://localhost:2019/users/user/name/like/da?sort=username
+    @ApiOperation(value = "returns all Users with names containing a given string",
+                  response = User.class,
+                  responseContainer = "List")
+    @ApiImplicitParams({@ApiImplicitParam(name = "page",
+                                          dataType = "integer",
+                                          paramType = "query",
+                                          value = "Results page you want to retrieve (0..N)"), @ApiImplicitParam(name = "size",
+                                                                                                                 dataType = "integer",
+                                                                                                                 paramType = "query",
+                                                                                                                 value = "Number of records per page."), @ApiImplicitParam(name = "sort",
+                                                                                                                                                                           allowMultiple = true,
+                                                                                                                                                                           dataType = "string",
+                                                                                                                                                                           paramType = "query",
+                                                                                                                                                                           value = "Sorting criteria in the format: property(,asc|desc). " + "Default sort order is ascending. " + "Multiple sort criteria are supported.")})
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping(value = "/user/name/like/{userName}",
+                produces = {"application/json"})
+    public ResponseEntity<?> getUserLikeName(HttpServletRequest request,
+                                             @PathVariable
+                                                     String userName,
+                                             @PageableDefault(page = 0,
+                                                              size = 5)
+                                                     Pageable pageable)
+    {
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
+        List<User> u = userService.findByNameContaining(userName,
+                                                        pageable);
+        return new ResponseEntity<>(u,
+                                    HttpStatus.OK);
+    }
+
+    // http://localhost:2019/users/getusername
     @GetMapping(value = "/getusername",
                 produces = {"application/json"})
     @ResponseBody
@@ -112,7 +161,37 @@ public class UserController
                                     HttpStatus.OK);
     }
 
+    // http://localhost:2019/users/getuserinfo
+    @GetMapping(value = "/getuserinfo",
+                produces = {"application/json"})
+    public ResponseEntity<?> getCurrentUserInfo(HttpServletRequest request,
+                                                Authentication authentication)
+    {
+        logger.trace(request.getMethod()
+                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
+        User u = userService.findByName(authentication.getName());
+        return new ResponseEntity<>(u,
+                                    HttpStatus.OK);
+    }
+
+    // http://localhost:2019/users/user
+    //        {
+    //            "username": "Mojo",
+    //            "primaryemail": "mojo@lambdaschool.local",
+    //            "password" : "Coffee123",
+    //            "useremails": [
+    //            {
+    //                "useremail": "mojo@mymail.local"
+    //            },
+    //            {
+    //                "useremail": "mojo@mymail.local"
+    //            },
+    //            {
+    //                "useremail": "mojo@email.local"
+    //            }
+    //        ]
+    //        }
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping(value = "/user",
                  consumes = {"application/json"},
@@ -141,6 +220,23 @@ public class UserController
     }
 
 
+    // http://localhost:2019/users/user/7
+//        {
+//            "userid": 7,
+//                "username": "cinnamon",
+//                "primaryemail": "cinnamon@lambdaschool.home",
+//                "useremails": [
+//            {
+//                    "useremail": "cinnamon@mymail.local"
+//            },
+//            {
+//                    "useremail": "hops@mymail.local"
+//            },
+//            {
+//                    "useremail": "bunny@email.local"
+//            }
+//        ]
+//        }
     @PutMapping(value = "/user/{id}")
     public ResponseEntity<?> updateUser(HttpServletRequest request,
                                         @RequestBody
@@ -158,6 +254,7 @@ public class UserController
     }
 
 
+    // http://localhost:2019/users/user/14
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUserById(HttpServletRequest request,
@@ -171,6 +268,7 @@ public class UserController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // http://localhost:2019/users/user/15/role/2
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/user/{userid}/role/{roleid}")
     public ResponseEntity<?> deleteUserRoleByIds(HttpServletRequest request,
@@ -188,6 +286,8 @@ public class UserController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    // http://localhost:2019/users/user/15/role/2
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/user/{userid}/role/{roleid}")
     public ResponseEntity<?> postUserRoleByIds(HttpServletRequest request,

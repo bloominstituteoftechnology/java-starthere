@@ -5,11 +5,14 @@ import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
 import com.lambdaschool.starthere.exceptions.ValidationError;
 import com.lambdaschool.starthere.models.ErrorDetail;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -23,11 +26,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 // bean shared across controller classes
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler
 {
@@ -129,7 +136,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
                                     headers,
                                     HttpStatus.NOT_FOUND);
     }
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -268,6 +274,34 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setDetail(ex.getMessage());
         errorDetail.setDeveloperMessage(ex.getClass()
                                           .getName());
+
+        try
+        {
+            Throwable cause = ((TransactionSystemException) ex).getRootCause();
+            if (cause instanceof ConstraintViolationException)
+            {
+                ArrayList<ValidationError> myErrorList = new ArrayList<>();
+                Iterator<ConstraintViolation<?>> itr = ((ConstraintViolationException) cause).getConstraintViolations()
+                                                                                             .iterator();
+                while (itr.hasNext())
+                {
+                    ConstraintViolation itrnext = itr.next();
+                    ValidationError myValidationError = new ValidationError();
+                    myValidationError.setCode(itrnext.getInvalidValue()
+                                                     .toString());
+                    myValidationError.setMessage(itrnext.getMessage());
+                    myErrorList.add(myValidationError);
+                }
+
+                errorDetail.getErrors()
+                           .put("Error",
+                                myErrorList);
+            }
+        }
+        catch (Exception e)
+        {
+            // just ignore
+        }
 
         return new ResponseEntity<>(errorDetail,
                                     null,

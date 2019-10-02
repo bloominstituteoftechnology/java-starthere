@@ -107,10 +107,16 @@ public class UserServiceImplUnitTest
     }
 
     @Test
+    public void AB_findByNameContaining()
+    {
+        assertEquals(4, userService.findByNameContaining("a", Pageable.unpaged()).size());
+    }
+
+    @Test
     public void F_save()
     {
         ArrayList<UserRoles> datas = new ArrayList<>();
-        User u2 = new User("tiger", "ILuvMath!", datas);
+        User u2 = new User("tiger", "ILuvMath!", "tiger@school.lambda", datas);
         u2.getUseremails()
           .add(new Useremail(u2, "tiger@tiger.local"));
 
@@ -127,7 +133,7 @@ public class UserServiceImplUnitTest
     public void FA_saveResourceFound()
     {
         ArrayList<UserRoles> datas = new ArrayList<>();
-        User u2 = new User("cinnamon", "ILuvMath!", datas);
+        User u2 = new User("cinnamon", "ILuvMath!", "cinnamon@school.lambda", datas);
         u2.getUseremails()
           .add(new Useremail(u2, "tiger@tiger.local"));
 
@@ -146,7 +152,7 @@ public class UserServiceImplUnitTest
     public void G_update()
     {
         ArrayList<UserRoles> datas = new ArrayList<>();
-        User u2 = new User("cinnamon", "password", datas);
+        User u2 = new User("cinnamon", "password", "cinnamon@school.lambda", datas);
         u2.getUseremails()
           .add(new Useremail(u2, "cinnamon@mymail.thump"));
         u2.getUseremails()
@@ -175,7 +181,7 @@ public class UserServiceImplUnitTest
         Role r2 = new Role("user");
 
         ArrayList<UserRoles> datas = new ArrayList<>();
-        User u2 = new User("cinnamon", "password", datas);
+        User u2 = new User("cinnamon", "password", "cinnamon@school.lambda", datas);
         datas.add(new UserRoles(u2, r2));
         u2.getUseremails()
           .add(new Useremail(u2, "cinnamon@mymail.thump"));
@@ -205,7 +211,7 @@ public class UserServiceImplUnitTest
         Role r2 = new Role("user");
 
         ArrayList<UserRoles> datas = new ArrayList<>();
-        User u2 = new User("cinnamon", "password", datas);
+        User u2 = new User("cinnamon", "password", "cinnamon@school.lambda", datas);
         u2.getUseremails()
           .add(new Useremail(u2, "cinnamon@mymail.thump"));
         u2.getUseremails()

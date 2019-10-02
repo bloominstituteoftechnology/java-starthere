@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserDetailsService,
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        User user = userrepos.findByUsername(username);
+        User user = userrepos.findByUsername(username.toLowerCase());
         if (user == null)
         {
             throw new UsernameNotFoundException("Invalid username or password.");
@@ -57,7 +57,8 @@ public class UserServiceImpl implements UserDetailsService,
     public List<User> findByNameContaining(String username,
                                            Pageable pageable)
     {
-        return userrepos.findByUsernameContainingIgnoreCase(username, pageable);
+        return userrepos.findByUsernameContainingIgnoreCase(username.toUpperCase(),
+                                                            pageable);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserDetailsService,
     @Override
     public User findByName(String name)
     {
-        User uu = userrepos.findByUsername(name);
+        User uu = userrepos.findByUsername(name.toLowerCase());
         if (uu == null)
         {
             throw new ResourceNotFoundException("User name " + name + " not found!");
@@ -102,6 +103,7 @@ public class UserServiceImpl implements UserDetailsService,
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPasswordNoEncrypt(user.getPassword());
+        newUser.setPrimaryemail(user.getPrimaryemail());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
         for (UserRoles ur : user.getUserroles())
@@ -150,10 +152,15 @@ public class UserServiceImpl implements UserDetailsService,
                 currentUser.setPasswordNoEncrypt(user.getPassword());
             }
 
+            if (user.getPrimaryemail() != null)
+            {
+                currentUser.setPrimaryemail(user.getPrimaryemail());
+            }
+
             if (user.getUserroles()
                     .size() > 0)
             {
-                throw new ResourceFoundException("User Roles are not updated through User");
+                throw new ResourceFoundException("User Roles are not updated through User. See endpoint POST: users/user/{userid}/role/{roleid}");
             }
 
             if (user.getUseremails()

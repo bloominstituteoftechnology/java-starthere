@@ -31,6 +31,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // mocking service to test controller
+// Due to reliance on security, cannot test
+//     getCurrentUserInfo
+//     getCurrentUserName
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = UserController.class, secure = false)
@@ -61,7 +64,7 @@ public class UserControllerUnitTest
         admins.add(new UserRoles(new User(), r1));
         admins.add(new UserRoles(new User(), r2));
         admins.add(new UserRoles(new User(), r3));
-        User u1 = new User("admin", "ILuvM4th!", admins);
+        User u1 = new User("admin", "ILuvM4th!", "admin@lambdaschool.local", admins);
 
         u1.getUseremails()
           .add(new Useremail(u1, "admin@email.local"));
@@ -78,7 +81,7 @@ public class UserControllerUnitTest
         ArrayList<UserRoles> datas = new ArrayList<>();
         datas.add(new UserRoles(new User(), r3));
         datas.add(new UserRoles(new User(), r2));
-        User u2 = new User("cinnamon", "1234567", datas);
+        User u2 = new User("cinnamon", "1234567", "cinnamon@lambdaschool.local", datas);
 
         u2.getUseremails()
           .add(new Useremail(u2, "cinnamon@mymail.local"));
@@ -98,7 +101,7 @@ public class UserControllerUnitTest
         // user
         ArrayList<UserRoles> users = new ArrayList<>();
         users.add(new UserRoles(new User(), r1));
-        User u3 = new User("testingbarn", "ILuvM4th!", users);
+        User u3 = new User("testingbarn", "ILuvM4th!", "testingbarn@school.lambda", users);
 
         u3.getUseremails()
           .add(new Useremail(u3, "barnbarn@email.local"));
@@ -109,13 +112,13 @@ public class UserControllerUnitTest
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u4 = new User("testingcat", "password", users);
+        User u4 = new User("testingcat", "password", "testingcat@school.lambda", users);
         u4.setUserid(104);
         userList.add(u4);
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u5 = new User("testingdog", "password", users);
+        User u5 = new User("testingdog", "password", "testingdog@school.lambda", users);
         u5.setUserid(105);
         userList.add(u5);
 
@@ -137,7 +140,51 @@ public class UserControllerUnitTest
     {
         String apiUrl = "/users/users";
 
+        Mockito.when(userService.findAll(any(Pageable.class))).thenReturn(userList);
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
+
+        // the following actually performs a real controller call
+        MvcResult r = mockMvc.perform(rb).andReturn(); // this could throw an exception
+        String tr = r.getResponse().getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(userList);
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List", er, tr);
+    }
+
+    @Test
+    public void listReallyAllUsers() throws Exception
+    {
+        String apiUrl = "/users/users/all";
+
         Mockito.when(userService.findAll(Pageable.unpaged())).thenReturn(userList);
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
+
+        // the following actually performs a real controller call
+        MvcResult r = mockMvc.perform(rb).andReturn(); // this could throw an exception
+        String tr = r.getResponse().getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(userList);
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List", er, tr);
+    }
+
+    @Test
+    public void listUsersNameContaining() throws Exception
+    {
+        String apiUrl = "/users/user/name/like/cin";
+
+        Mockito.when(userService.findByNameContaining(any(String.class), any(Pageable.class))).thenReturn(userList);
 
         RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
 

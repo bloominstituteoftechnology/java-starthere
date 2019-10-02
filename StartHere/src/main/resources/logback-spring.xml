@@ -1,5 +1,7 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 
+<!--        https://stackify.com/log4j2-java/-->
+
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -74,7 +76,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="org.springframework.jdbc.core" level="TRACE" additivity="false">
+    <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 </configuration>

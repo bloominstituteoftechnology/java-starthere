@@ -25,7 +25,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception
     {
         // http.anonymous().disable(); // since we allow anonymous users to access Swagger
-                                       // and create a user account
+        // and create a user account
         http.authorizeRequests()
             .antMatchers("/",
                          "/h2-console/**",
@@ -37,6 +37,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
                          "/createnewuser")
             .permitAll()
             .antMatchers("/users/**",
+                         "/useremails/**",
                          "/oauth/revoke-token",
                          "/logout")
             .authenticated()

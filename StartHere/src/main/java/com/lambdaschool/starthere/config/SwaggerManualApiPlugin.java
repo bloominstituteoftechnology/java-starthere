@@ -1,7 +1,7 @@
 package com.lambdaschool.starthere.config;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.lambdaschool.starthere.models.UserMinimum;
+import com.lambdaschool.starthere.models.UserLogin;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -52,12 +52,12 @@ public class SwaggerManualApiPlugin implements ApiListingScannerPlugin
                                                                                                                   .notes("This is the login endpoint to request an authentication token")
                                                                                                                   .responseMessages(responseMessages())
                                                                                                                   .parameters(Arrays.asList(new ParameterBuilder().description("Login Parameter")
-                                                                                                                                                                  .type(new TypeResolver().resolve(UserMinimum.class))
+                                                                                                                                                                  .type(new TypeResolver().resolve(UserLogin.class))
                                                                                                                                                                   .name("userLogin")
                                                                                                                                                                   .parameterType("body")
                                                                                                                                                                   .parameterAccess("access")
                                                                                                                                                                   .required(true)
-                                                                                                                                                                  .modelRef(new ModelRef("UserMinimum"))
+                                                                                                                                                                  .modelRef(new ModelRef("UserLogin"))
                                                                                                                                                                   .build()))
                                                                                                                   .build()),
                                                                 false)));

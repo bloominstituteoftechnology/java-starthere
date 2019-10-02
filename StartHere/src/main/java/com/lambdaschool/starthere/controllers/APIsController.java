@@ -16,6 +16,17 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * This can be removed from the base application. This controller contains
+ * examples of how to handle other situations
+ * <p>
+ * > Reading another API
+ * > Uploading a file into a db (in progress)
+ * > Uploading a file into a file (in progress)
+ * > sending an email from an endpoint (in progress)
+ * > sending something via twilio from an endpoint (in progress)
+ */
+
 @RestController
 @RequestMapping("/otherapis")
 public class APIsController

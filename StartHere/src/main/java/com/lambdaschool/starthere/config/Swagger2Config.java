@@ -42,7 +42,8 @@ public class Swagger2Config
                                                       .apiInfo(apiEndPointsInfo())
                                                       .pathMapping("/")
                                                       .additionalModels(resolver.resolve(APIOpenLibrary.class),
-                                                                        resolver.resolve(TokenModel.class))
+                                                                        resolver.resolve(TokenModel.class),
+                                                                        resolver.resolve(ErrorDetail.class))
                                                       .ignoredParameterTypes(SimpleGrantedAuthority.class);
     }
 

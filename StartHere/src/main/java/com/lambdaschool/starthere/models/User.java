@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class User extends Auditable
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column(nullable = false,
+            unique = true)
+    @Email
+    private String primaryemail;
+
     @OneToMany(mappedBy = "user",
                cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
@@ -45,10 +51,12 @@ public class User extends Auditable
 
     public User(String username,
                 String password,
+                String primaryemail,
                 List<UserRoles> userRoles)
     {
         setUsername(username);
         setPassword(password);
+        this.primaryemail = primaryemail;
         for (UserRoles ur : userRoles)
         {
             ur.setUser(this);
@@ -68,12 +76,28 @@ public class User extends Auditable
 
     public String getUsername()
     {
-        return username;
+        if (username == null) // this is possible when updating a user
+        {
+            return null;
+        } else
+        {
+            return username.toLowerCase();
+        }
     }
 
     public void setUsername(String username)
     {
         this.username = username.toLowerCase();
+    }
+
+    public String getPrimaryemail()
+    {
+        return primaryemail;
+    }
+
+    public void setPrimaryemail(String primaryemail)
+    {
+        this.primaryemail = primaryemail;
     }
 
     public String getPassword()
@@ -131,6 +155,6 @@ public class User extends Auditable
     @Override
     public String toString()
     {
-        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", userRoles=" + userroles + ", useremails=" + useremails + '}';
+        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", primaryEmail='" + primaryemail + '\'' + ", userroles=" + userroles + ", useremails=" + useremails + '}';
     }
 }

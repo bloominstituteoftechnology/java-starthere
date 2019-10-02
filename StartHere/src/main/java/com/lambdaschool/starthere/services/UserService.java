@@ -12,7 +12,8 @@ public interface UserService
 
     List<User> findAll(Pageable pageable);
 
-    List<User> findByNameContaining(String username, Pageable pageable);
+    List<User> findByNameContaining(String username,
+                                    Pageable pageable);
 
     User findUserById(long id);
 

@@ -35,10 +35,20 @@ public class UseremailServiceImpl implements UseremailService
     }
 
     @Override
-    public List<Useremail> findByUserName(String username)
+    public List<Useremail> findByUserName(String username,
+                                          boolean isAdmin)
     {
-        return useremailrepos.findAllByUser_Username(username);
+        Authentication authentication = SecurityContextHolder.getContext()
+                                                             .getAuthentication();
+        if (username.equalsIgnoreCase(authentication.getName()) || isAdmin)
+        {
+            return useremailrepos.findAllByUser_Username(username);
+        } else
+        {
+            throw new ResourceNotFoundException(authentication.getName() + " not authorized to make change");
+        }
     }
+
 
     @Override
     public void delete(long id,
@@ -67,20 +77,31 @@ public class UseremailServiceImpl implements UseremailService
     }
 
     @Override
-    public Useremail save(Useremail useremail,
-                          boolean isAdmin)
+    public Useremail update(long useremailid,
+                            String emailaddress,
+                            boolean isAdmin)
     {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
-
-        if (useremail.getUser()
-                     .getUsername()
-                     .equalsIgnoreCase(authentication.getName()) || isAdmin)
+        if (useremailrepos.findById(useremailid)
+                          .isPresent())
         {
-            return useremailrepos.save(useremail);
+            if (useremailrepos.findById(useremailid)
+                              .get()
+                              .getUser()
+                              .getUsername()
+                              .equalsIgnoreCase(authentication.getName()) || isAdmin)
+            {
+                Useremail useremail = findUseremailById(useremailid);
+                useremail.setUseremail(emailaddress);
+                return useremailrepos.save(useremail);
+            } else
+            {
+                throw new ResourceNotFoundException(authentication.getName() + " not authorized to make change");
+            }
         } else
         {
-            throw new ResourceNotFoundException((authentication.getName() + "not authorized to make change"));
+            throw new ResourceNotFoundException("Useremail with id " + useremailid + " Not Found!");
         }
     }
 }

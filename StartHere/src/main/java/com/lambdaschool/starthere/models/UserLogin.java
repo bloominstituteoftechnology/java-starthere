@@ -1,10 +1,9 @@
 package com.lambdaschool.starthere.models;
 
-public class UserMinimum
+public class UserLogin
 {
     private String username;
     private String password;
-    private String primaryemail;
 
     public String getUsername()
     {
@@ -24,15 +23,5 @@ public class UserMinimum
     public void setPassword(String password)
     {
         this.password = password;
-    }
-
-    public String getPrimaryemail()
-    {
-        return primaryemail;
-    }
-
-    public void setPrimaryemail(String primaryemail)
-    {
-        this.primaryemail = primaryemail;
     }
 }

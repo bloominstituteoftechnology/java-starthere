@@ -2,7 +2,6 @@ package com.lambdaschool.starthere.models;
 
 
 import com.lambdaschool.starthere.exceptions.ValidationError;
-import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
