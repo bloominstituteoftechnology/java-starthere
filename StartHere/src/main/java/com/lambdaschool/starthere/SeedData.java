@@ -122,7 +122,8 @@ public class SeedData implements CommandLineRunner
 
         for (int i = 0; i < 100; i++)
         {
-            User fakeUser = new User();
+            new User();
+            User fakeUser;
 
             users = new ArrayList<>();
             users.add(new UserRoles(new User(),
