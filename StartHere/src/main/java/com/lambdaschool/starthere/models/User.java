@@ -92,12 +92,18 @@ public class User extends Auditable
 
     public String getPrimaryemail()
     {
-        return primaryemail;
+        if (primaryemail == null) // this is possible when updating a user
+        {
+            return null;
+        } else
+        {
+            return primaryemail.toLowerCase();
+        }
     }
 
     public void setPrimaryemail(String primaryemail)
     {
-        this.primaryemail = primaryemail;
+        this.primaryemail = primaryemail.toLowerCase();
     }
 
     public String getPassword()

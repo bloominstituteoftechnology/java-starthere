@@ -47,12 +47,18 @@ public class Useremail extends Auditable
 
     public String getUseremail()
     {
-        return useremail;
+        if (useremail == null) // this is possible when updating a user
+        {
+            return null;
+        } else
+        {
+            return useremail.toLowerCase();
+        }
     }
 
     public void setUseremail(String useremail)
     {
-        this.useremail = useremail;
+        this.useremail = useremail.toLowerCase();
     }
 
     public User getUser()

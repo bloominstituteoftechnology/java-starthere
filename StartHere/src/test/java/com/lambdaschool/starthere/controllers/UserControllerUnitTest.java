@@ -272,13 +272,14 @@ public class UserControllerUnitTest
     {
         String apiUrl = "/users/user";
 
-        // build a restaurant
+        // build a user
         ArrayList<UserRoles> thisRole = new ArrayList<>();
         ArrayList<Useremail> thisEmail = new ArrayList<>();
         User u1 = new User();
         u1.setUserid(100);
         u1.setUsername("tiger");
         u1.setPassword("ILuvM4th!");
+        u1.setPrimaryemail("tiger@home.local");
         u1.setUserroles(thisRole);
         u1.setUseremails(thisEmail);
 
@@ -299,15 +300,14 @@ public class UserControllerUnitTest
     {
         String apiUrl = "/users/user/{userid}";
 
-        // build a restaurant
-        ArrayList<UserRoles> thisRole = new ArrayList<>();
-        ArrayList<Useremail> thisEmail = new ArrayList<>();
+        // build a user
         User u1 = new User();
         u1.setUserid(100);
         u1.setUsername("tigerUpdated");
+        u1.setPrimaryemail("home@local.home");
         u1.setPassword("ILuvM4th!");
 
-        Mockito.when(userService.update(u1, 100L, true)).thenReturn(u1);
+        Mockito.when(userService.update(u1, 100L, true)).thenReturn(userList.get(0));
 
         ObjectMapper mapper = new ObjectMapper();
         String userString = mapper.writeValueAsString(u1);

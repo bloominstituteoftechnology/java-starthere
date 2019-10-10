@@ -40,9 +40,9 @@ public class UseremailServiceImpl implements UseremailService
     {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
-        if (username.equalsIgnoreCase(authentication.getName()) || isAdmin)
+        if (username.equalsIgnoreCase(authentication.getName().toLowerCase()) || isAdmin)
         {
-            return useremailrepos.findAllByUser_Username(username);
+            return useremailrepos.findAllByUser_Username(username.toLowerCase());
         } else
         {
             throw new ResourceNotFoundException(authentication.getName() + " not authorized to make change");
@@ -93,7 +93,7 @@ public class UseremailServiceImpl implements UseremailService
                               .equalsIgnoreCase(authentication.getName()) || isAdmin)
             {
                 Useremail useremail = findUseremailById(useremailid);
-                useremail.setUseremail(emailaddress);
+                useremail.setUseremail(emailaddress.toLowerCase());
                 return useremailrepos.save(useremail);
             } else
             {
