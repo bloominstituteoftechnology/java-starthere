@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.models;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 import static javax.persistence.TemporalType.TIMESTAMP;
 
+@Loggable
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 abstract class Auditable

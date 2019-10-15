@@ -1,6 +1,7 @@
 package com.lambdaschool.starthere.services;
 
 import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.Useremail;
 import com.lambdaschool.starthere.repository.UseremailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Loggable
 @Service(value = "useremailService")
 public class UseremailServiceImpl implements UseremailService
 {

@@ -3,6 +3,7 @@ package com.lambdaschool.starthere.handlers;
 import com.lambdaschool.starthere.exceptions.ResourceFoundException;
 import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
 import com.lambdaschool.starthere.exceptions.ValidationError;
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.ErrorDetail;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
@@ -33,6 +34,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+@Loggable
 // bean shared across controller classes
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice

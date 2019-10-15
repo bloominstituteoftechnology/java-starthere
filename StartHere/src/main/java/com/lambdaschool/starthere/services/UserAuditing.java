@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.services;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Loggable
 @Component
 public class UserAuditing implements AuditorAware<String>
 {

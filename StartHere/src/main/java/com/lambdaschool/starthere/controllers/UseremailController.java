@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.controllers;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.Useremail;
 import com.lambdaschool.starthere.services.UseremailService;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Loggable
 @RestController
 @RequestMapping("/useremails")
 public class UseremailController

@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.controllers;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.User;
 import com.lambdaschool.starthere.services.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,7 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-
+@Loggable
 @RestController
 @RequestMapping("/users")
 public class UserController

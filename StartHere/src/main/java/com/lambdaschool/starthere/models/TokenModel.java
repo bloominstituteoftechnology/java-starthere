@@ -1,5 +1,8 @@
 package com.lambdaschool.starthere.models;
 
+import com.lambdaschool.starthere.logging.Loggable;
+
+@Loggable
 public class TokenModel
 {
     private String access_token;

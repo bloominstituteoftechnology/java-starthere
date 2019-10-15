@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.controllers;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.Role;
 import com.lambdaschool.starthere.services.RoleService;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+@Loggable
 @RestController
 @RequestMapping("/roles")
 public class RolesController

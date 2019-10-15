@@ -72,7 +72,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.lambdaschool" level="INFO" additivity="false">
+    <logger name="com.lambdaschool" level="TRACE" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 

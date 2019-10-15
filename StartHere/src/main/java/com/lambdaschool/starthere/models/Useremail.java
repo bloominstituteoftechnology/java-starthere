@@ -1,10 +1,12 @@
 package com.lambdaschool.starthere.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lambdaschool.starthere.logging.Loggable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 
+@Loggable
 @Entity
 @Table(name = "useremails",
        uniqueConstraints = {@UniqueConstraint(columnNames = {"userid", "useremail"})})

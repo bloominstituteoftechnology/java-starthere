@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.controllers;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.User;
 import com.lambdaschool.starthere.models.UserMinimum;
 import com.lambdaschool.starthere.models.UserRoles;
@@ -23,6 +24,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Loggable
 @RestController
 public class OpenController
 {

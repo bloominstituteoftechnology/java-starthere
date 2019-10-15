@@ -2,6 +2,7 @@ package com.lambdaschool.starthere.models;
 
 
 import com.lambdaschool.starthere.exceptions.ValidationError;
+import com.lambdaschool.starthere.logging.Loggable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Loggable
 // adapted from https://tools.ietf.org/html/rfc7807
 public class ErrorDetail
 {

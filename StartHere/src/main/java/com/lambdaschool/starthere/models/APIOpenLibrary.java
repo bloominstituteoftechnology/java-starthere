@@ -1,5 +1,8 @@
 package com.lambdaschool.starthere.models;
 
+import com.lambdaschool.starthere.logging.Loggable;
+
+@Loggable
 // Taken from the output of https://openlibrary.org/api/books?bibkeys=ISBN:0982477562&format=json
 // This class must match the JSON object
 public class APIOpenLibrary

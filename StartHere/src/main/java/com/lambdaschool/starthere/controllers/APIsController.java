@@ -1,5 +1,6 @@
 package com.lambdaschool.starthere.controllers;
 
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.APIOpenLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import java.util.Map;
  * > sending something via twilio from an endpoint (in progress)
  */
 
+@Loggable
 @RestController
 @RequestMapping("/otherapis")
 public class APIsController

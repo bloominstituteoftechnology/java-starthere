@@ -1,11 +1,13 @@
 package com.lambdaschool.starthere.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lambdaschool.starthere.logging.Loggable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Loggable
 @Entity
 @Table(name = "roles")
 public class Role extends Auditable

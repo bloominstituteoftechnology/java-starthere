@@ -2,6 +2,7 @@ package com.lambdaschool.starthere.services;
 
 import com.lambdaschool.starthere.exceptions.ResourceFoundException;
 import com.lambdaschool.starthere.exceptions.ResourceNotFoundException;
+import com.lambdaschool.starthere.logging.Loggable;
 import com.lambdaschool.starthere.models.Role;
 import com.lambdaschool.starthere.models.User;
 import com.lambdaschool.starthere.models.UserRoles;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Loggable
 @Service(value = "roleService")
 public class RoleServiceImpl implements RoleService
 {
