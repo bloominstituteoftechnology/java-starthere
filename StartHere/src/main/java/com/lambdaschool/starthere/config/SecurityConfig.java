@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 
-    @Resource(name = "userService")
+    @Resource(name = "securityUserService")
     private UserDetailsService userDetailsService;
 
     @Override

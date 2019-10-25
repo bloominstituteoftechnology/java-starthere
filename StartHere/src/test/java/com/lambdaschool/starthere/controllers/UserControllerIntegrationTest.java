@@ -1,7 +1,6 @@
 package com.lambdaschool.starthere.controllers;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,9 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.number.OrderingComparison.lessThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -41,18 +39,6 @@ public class UserControllerIntegrationTest
 
     private MockMvc mockMvc;
 
-    public static String asJsonString(final Object obj)
-    {
-        try
-        {
-            return new ObjectMapper().writeValueAsString(obj);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Before
     public void setUp() throws Exception
     {
@@ -70,27 +56,29 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void A_whenMeasuredResponseTime()
+    public void whenMeasuredResponseTime() throws Exception
     {
-        given().when()
-               .get("/users/users")
-               .then()
-               .time(lessThan(5000L));
+        long time = System.currentTimeMillis();
+        this.mockMvc.perform(get("/users/users")).andDo(print());
+        long responseTime = (System.currentTimeMillis() - time);
+
+        assertTrue("timestamp", (responseTime < 5000L));
     }
 
     @WithUserDetails("testbarn")
     @Test
-    public void B_getAllUsers() throws Exception
+    public void getAllUsers() throws Exception
     {
         this.mockMvc.perform(get("/users/users"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(containsString("testbarn")));
+
     }
 
     @WithUserDetails("testbarn")
     @Test
-    public void BA_getReallyAllUsers() throws Exception
+    public void getReallyAllUsers() throws Exception
     {
         this.mockMvc.perform(get("/users/users/all"))
                     .andDo(print())
@@ -100,7 +88,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void BB_getUserName() throws Exception
+    public void getUserName() throws Exception
     {
         this.mockMvc.perform(get("/users/getusername"))
                     .andDo(print())
@@ -110,7 +98,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void BC_getUserInfo() throws Exception
+    public void getUserInfo() throws Exception
     {
         this.mockMvc.perform(get("/users/getuserinfo"))
                     .andDo(print())
@@ -120,7 +108,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void BD_getUserLikeName() throws Exception
+    public void getUserLikeName() throws Exception
     {
         this.mockMvc.perform(get("/users/user/name/like/{userName}", "test"))
                     .andDo(print())
@@ -130,7 +118,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void C_getUserById() throws Exception
+    public void getUserById() throws Exception
     {
         this.mockMvc.perform(get("/users/user/{userid}",
                                  14))
@@ -141,7 +129,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void CA_getUserByIdNotFound() throws Exception
+    public void getUserByIdNotFound() throws Exception
     {
         this.mockMvc.perform(get("/users/user/{userid}",
                                  100))
@@ -152,7 +140,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void D_getUserByName() throws Exception
+    public void getUserByName() throws Exception
     {
         this.mockMvc.perform(get("/users/user/name/{userName}",
                                  "testcat"))
@@ -163,7 +151,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void DA_getUserByNameNotFound() throws Exception
+    public void getUserByNameNotFound() throws Exception
     {
         this.mockMvc.perform(get("/users/user/name/{userName}",
                                  "rabbit"))
@@ -174,7 +162,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testdog")
     @Test
-    public void E_getCurrentUserName() throws Exception
+    public void getCurrentUserName() throws Exception
     {
         this.mockMvc.perform(get("/users/getusername"))
                     .andDo(print())
@@ -184,7 +172,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("testbarn")
     @Test
-    public void F_givenPostAUser() throws Exception
+    public void givenPostAUser() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.post("/users/user")
                                               .content("{\"username\": \"Ginger\", \"password\": \"EATEATEAT\", \"primaryemail\" : \"ginger@home.local\"}")
@@ -198,7 +186,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("admin")
     @Test
-    public void G_deleteUserById() throws Exception
+    public void deleteUserById() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/user/{id}",
                                                       13))
@@ -208,7 +196,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("admin")
     @Test
-    public void GA_deleteUserByIdNotFound() throws Exception
+    public void deleteUserByIdNotFound() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/user/{id}",
                                                       100))
@@ -218,7 +206,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("admin")
     @Test
-    public void H_UpdateUser() throws Exception
+    public void UpdateUser() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.put("/users/user/{userid}",
                                                    7)
@@ -231,7 +219,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("admin")
     @Test
-    public void I_deleteUserRoleByIds() throws Exception
+    public void deleteUserRoleByIds() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/user/{userid}/role/{roleid}",
                                                       7,
@@ -242,7 +230,7 @@ public class UserControllerIntegrationTest
 
     @WithUserDetails("admin")
     @Test
-    public void J_postUserRoleByIds() throws Exception
+    public void postUserRoleByIds() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders.post("/users/user/{userid}/role/{roleid}",
                                                     7,

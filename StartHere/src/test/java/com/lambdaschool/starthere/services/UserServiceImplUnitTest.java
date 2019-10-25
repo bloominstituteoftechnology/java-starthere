@@ -50,19 +50,6 @@ public class UserServiceImplUnitTest
     }
 
     @Test
-    public void A_loadUserByUsername()
-    {
-        assertEquals("admin", userService.loadUserByUsername("admin").getUsername());
-    }
-
-    @Test (expected = UsernameNotFoundException.class)
-    public void AA_loadUserByUsernameNotfound()
-    {
-        assertEquals("admin", userService.loadUserByUsername("turtle").getUsername());
-    }
-
-
-    @Test
     public void B_findUserById()
     {
         assertEquals("admin", userService.findUserById(4).getUsername());

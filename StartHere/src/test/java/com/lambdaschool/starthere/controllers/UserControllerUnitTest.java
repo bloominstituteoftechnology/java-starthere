@@ -6,40 +6,48 @@ import com.lambdaschool.starthere.models.User;
 import com.lambdaschool.starthere.models.UserRoles;
 import com.lambdaschool.starthere.models.Useremail;
 import com.lambdaschool.starthere.services.UserService;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // mocking service to test controller
-// Due to reliance on security, cannot test
-//     getCurrentUserInfo
-//     getCurrentUserName
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = UserController.class, secure = false)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@WithMockUser(username="admin",roles={"USER","ADMIN"})
 public class UserControllerUnitTest
 {
     @Autowired
+    private WebApplicationContext webApplicationContext;
+
     private MockMvc mockMvc;
 
     @MockBean
@@ -128,6 +136,12 @@ public class UserControllerUnitTest
             System.out.println(u);
         }
         System.out.println("*** Seed Data ***\n");
+
+        RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
+
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                                 .apply(SecurityMockMvcConfigurers.springSecurity())
+                                 .build();
     }
 
     @After
@@ -263,8 +277,38 @@ public class UserControllerUnitTest
     @Test
     public void getCurrentUserName() throws Exception
     {
-        // requires security which we have turned off for unit test
-        // refer to integration testing for test of this method
+        String apiUrl = "/users/getusername";
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
+        MvcResult r = mockMvc.perform(rb).andReturn(); // this could throw an exception
+        String tr = r.getResponse().getContentAsString();
+
+        String er = "{\"password\":\"password\",\"username\":\"admin\",\"authorities\":[{\"authority\":\"ROLE_ADMIN\"},{\"authority\":\"ROLE_USER\"}],\"accountNonExpired\":true,\"accountNonLocked\":true,\"credentialsNonExpired\":true,\"enabled\":true}";
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List", er, tr);
+    }
+
+    @Test
+    public void getUserInfo() throws Exception
+    {
+        String apiUrl = "/users/getuserinfo";
+
+        Mockito.when(userService.findByName(anyString())).thenReturn(userList.get(0));
+
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
+        MvcResult r = mockMvc.perform(rb).andReturn(); // this could throw an exception
+        String tr = r.getResponse().getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String er = mapper.writeValueAsString(userList.get(0));
+
+        System.out.println("Expect: " + er);
+        System.out.println("Actual: " + tr);
+
+        assertEquals("Rest API Returns List", er, tr);
     }
 
     @Test
