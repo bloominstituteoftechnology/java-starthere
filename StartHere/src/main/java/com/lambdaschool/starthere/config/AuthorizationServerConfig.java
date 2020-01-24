@@ -14,10 +14,10 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter
 {
-    static final String CLIENT_ID = System.getenv("OAUTHCLIENTID"); // read from environment variable
-    static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET"); // read from environment variable
-    // static final String CLIENT_ID = "lambda-client";
-    // static final String CLIENT_SECRET = "lambda-secret";
+//    static final String CLIENT_ID = System.getenv("OAUTHCLIENTID"); // read from environment variable
+//    static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET"); // read from environment variable
+    static final String CLIENT_ID = "lambda-client";
+    static final String CLIENT_SECRET = "lambda-secret";
 
     static final String GRANT_TYPE_PASSWORD = "password";
     static final String AUTHORIZATION_CODE = "authorization_code";
@@ -39,8 +39,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception
     {
-        //                .authorizedGrantTypes(GRANT_TYPE_PASSWORD, AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT)
-
         configurer.inMemory()
                   .withClient(CLIENT_ID)
                   .secret(encoder.encode(CLIENT_SECRET))
